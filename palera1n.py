@@ -73,14 +73,16 @@ def display_menu_with_cursor(menu):
 
 def get_device_state():
     appledevice = subprocess.check_output('lsusb | grep "Apple"; exit 0', shell=True)
-    # --- Check if Apple device connected ---
     if not appledevice:
         return None
-    # check if DFU or recovery mode present
-    devicerecovery = subprocess.check_output('lsusb | grep "Recovery"; exit 0', shell=True)
-    devicedfu = subprocess.check_output('lsusb | grep "DFU"; exit 0', shell=True)
-    return "dfu" if devicedfu else \
-        "recovery" if devicerecovery else "normal"
+    appledevice=appledevice.decode('utf8')
+    if 'Recovery' in appledevice:
+        return "recovery"
+    elif 'DFU' in appledevice or 'PongoOS' in appledevice:
+        return 'dfu'
+    else:
+        return 'normal'
+    
 
 def animation_connection(root_type, options):
     global current_menu, cursor_position
@@ -138,7 +140,7 @@ def animation_connection(root_type, options):
 
     if get_device_state() == "normal":
         for process in background_processes:
-                    process.terminate()
+            process.terminate()
         subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
         exit(0)
     else:

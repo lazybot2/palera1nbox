@@ -121,15 +121,10 @@ def clear_screen():
 
 def get_device_state():
     appledevice = subprocess.check_output('lsusb | grep "Apple"; exit 0', shell=True)
-    # --- Check if Apple device connected ---
     if not appledevice:
         return False
-    # check if DFU or recovery mode present
-    devicerecovery = subprocess.check_output('lsusb | grep "Recovery"; exit 0', shell=True)
-    devicedfu = subprocess.check_output('lsusb | grep "DFU"; exit 0', shell=True)
-    return "dfu" if devicedfu else \
-        "recovery" if devicerecovery else "normal"
-
+    else:
+        return True
 
 if __name__ == "__main__":
     signal.signal(signal.SIGUSR1, navigate_options)
