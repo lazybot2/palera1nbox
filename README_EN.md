@@ -66,7 +66,7 @@ other:
 
 	2.Etcher To SD card
 
-## [youtube](https://www.youtube.com/playlist?list=PLv2ojzLXyelMOqk1nPhixQuGTWQnM8f3E)
+## youtube(https://www.youtube.com/playlist?list=PLv2ojzLXyelMOqk1nPhixQuGTWQnM8f3E)
 
 ## Donation
 
