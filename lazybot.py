@@ -10,7 +10,8 @@ image = Image.new('1', (width, height))
 draw = ImageDraw.Draw(image)
 font18 = ImageFont.truetype('DejaVuSansMono.ttf', 22)
 font10 = ImageFont.truetype('DejaVuSansMono.ttf', 13)
-# Initialise un nouveau groupe de processus
+text='PaleBox'
+name='lazybot'
 os.setpgrp()
 def draw_drop(draw, x, y, r):
     draw.ellipse((x, y, x+r, y+r+3), outline="white", fill="white")
@@ -20,8 +21,7 @@ def draw_text(draw, text, x, y,font):
 oled.init()
 oled.setNormalDisplay()
 oled.setHorizontalMode()
-text='PaleBox'
-name='lazybot'
+
 def bb(text,name):
     x_tab=[]
     y_tab=[]

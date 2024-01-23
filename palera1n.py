@@ -2,20 +2,11 @@
 from PIL import Image, ImageFont, ImageDraw
 import time,signal,subprocess,os
 
-phases = [
-    {"message": "Prepare enter DFU", "countdown": [3, 2, 1], "is_text": True},
-    {"message": "Press", "countdown": [4, 3, 2, 1, 0]},
-    {"message": "Release", "countdown": [8, 7, 6, 5, 4, 3, 2, 1]}
-]
-
 
 background_processes = []
-
-# Initialisation
 width, height = 128, 64
 image = Image.new('1', (width, height))
 draw = ImageDraw.Draw(image)
-font18 = ImageFont.truetype('DejaVuSansMono.ttf', 18)
 font14 = ImageFont.truetype('DejaVuSansMono.ttf', 14)
 font10 = ImageFont.truetype('DejaVuSansMono.ttf', 10)
 bash_path =f'{os.getcwd()}/'
@@ -32,8 +23,8 @@ oled.setHorizontalMode()
 # Variables
 current_menu = 'main'
 cursor_position = 0
-rootless_options = {'Verbose': False, 'Safe Mode': False, 'Force Revert': False, 'Debug': False}
-rootfull_options = {'Create FakeFS': False, 'Create BindFS': False, 'Verbose': False, 'Safe Mode': False, 'Restore RootFS': False, 'Debug': False}
+rootless_options = {'Verbose': True, 'Safe Mode': False, 'Force Revert': False, 'Debug': False}
+rootfull_options = {'Create FakeFS': False, 'Create BindFS': False, 'Verbose': True, 'Safe Mode': False, 'Restore RootFS': False, 'Debug': False}
 recover_options={'Exit Recovery':True}
 # Mappage des arguments
 rootless_arg_map = {'Verbose': '--verbose-boot ', 'Safe Mode': '--safe-mode ', 'Force Revert': '--force-revert ', 'Debug': '--debug-logging '}
@@ -95,6 +86,30 @@ def animation_connection(root_type, options):
     x_position = (width - text_width) / 2
     y_position = (height - text_height) / 2
     draw.text((x_position, y_position), text, font=font14, fill=255)
+    if root_type=='rootfull' or root_type=='rootless':
+        mode_txt=f'MODE: {root_type.upper()}'
+        x_position = 3
+        y_position = 1
+        draw.text((x_position, y_position),mode_txt, font=font10, fill=255)
+        text=''
+        if root_type=='rootfull':
+            text_list={'Create FakeFS': 'FakeFs', 'Create BindFS': 'BindFs', 'Safe Mode': 'Safe', 'Restore RootFS': 'ResRootFs'}
+            option_num=0
+            for option in text_list:
+                if rootfull_options[option]:
+                    option_num+=1
+                    text=f'{text}{option} '
+            if option_num==0:
+                text=f'{text}BootFs '
+            elif option_num>1:
+                text='Option:Error '
+            if option_num>0:
+                text_width, text_height = draw.textsize(text, font=font10)
+                x_position = (width - text_width)-3
+                if x_position<0:
+                    x_position = 0
+                y_position = (height - text_height)-3
+                draw.text((x_position, y_position),text, font=font10, fill=255)
     oled.drawImage(image)
     text='dfu'
     if root_type == 'recover':
@@ -125,7 +140,7 @@ def animation_connection(root_type, options):
 
     startTime = time.time()
     while (time.time() - startTime) < 900:
-        if get_device_state() == "normal":
+        if get_device_state():
             break
         time.sleep(1)
 
