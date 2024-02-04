@@ -86,7 +86,7 @@ def animation_connection(root_type, options):
     x_position = (width - text_width) / 2
     y_position = (height - text_height) / 2
     draw.text((x_position, y_position), text, font=font14, fill=255)
-    if root_type=='rootfull' or root_type=='rootless':
+    if root_type:
         mode_txt=f'MODE: {root_type.upper()}'
         x_position = 3
         y_position = 1
@@ -97,6 +97,24 @@ def animation_connection(root_type, options):
             option_num=0
             for option in text_list:
                 if rootfull_options[option]:
+                    option_num+=1
+                    text=f'{text}{option} '
+            if option_num==0:
+                text=f'{text}BootFs '
+            elif option_num>1:
+                text='Option:Error '
+            if option_num>0:
+                text_width, text_height = draw.textsize(text, font=font10)
+                x_position = (width - text_width)-3
+                if x_position<0:
+                    x_position = 0
+                y_position = (height - text_height)-3
+                draw.text((x_position, y_position),text, font=font10, fill=255)
+        elif root_type=='rootless':
+            text_list={'Safe Mode': 'Safe Mode', 'Force Revert': 'Force Revert',}
+            option_num=0
+            for option in text_list:
+                if rootless_options[option]:
                     option_num+=1
                     text=f'{text}{option} '
             if option_num==0:

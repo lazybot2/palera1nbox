@@ -14,7 +14,7 @@ text='PaleBox'
 name='lazybot'
 os.setpgrp()
 def draw_drop(draw, x, y, r):
-    draw.ellipse((x, y, x+r, y+r+3), outline="white", fill="white")
+    draw.ellipse((x, y, x+r, y+r+r), outline="white", fill="white")
 def draw_text(draw, text, x, y,font):
     draw.text((x, y), text, font=font, fill="white")    
 
@@ -30,12 +30,11 @@ def bb(text,name):
     name_width, name_height=draw.textsize(name, font=font10)
     x=1
     y=3
-    bb_r=1
     tmp=(width-name_width)//len(text)
-    for i in range(randint(12,18)):
+    for i in range(randint(20,30)):
         x_tab.append(randint(3,128))
         y_tab.append(randint(0,64))
-    for i in range(23):
+    for i in range(30):
         draw.rectangle((0, 0, width, height), outline=0, fill=0)
         draw_text(draw, text[(len(text)-textlen):len(text)], x, (height-text_height)//2,font18)
         draw_text(draw, name, (width-(textlen-1)*tmp), (height-name_height-2),font10)
@@ -43,7 +42,7 @@ def bb(text,name):
             textlen+=1
         else:
             for k in range(len(x_tab)):
-                draw_drop(draw, x_tab[k], (y_tab[k]+y+randint(0,3))%64,bb_r)
+                draw_drop(draw, x_tab[k], (y_tab[k]+y+randint(0,3))%64,randint(1,3))
             y+=randint(6,9)
         if x<(width - text_width) / 2:
             x+=2
