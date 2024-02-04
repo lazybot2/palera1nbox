@@ -86,8 +86,8 @@ NaonPi NEO(2)越狱盒子
 ## 使用制作好的懒人包
 
 	1.下载NanoPi Neo懒人包 
-   -  [谷歌](https://drive.google.com/file/d/1aHFxEIuJvwQLt-UAyPknbqBUZiagUj7f/view?usp=sharing)
-   -  [百度](https://pan.baidu.com/s/1CsXOTnKeEkon6DHL0b_dhQ)提取码:pale
+   -  [谷歌](https://drive.google.com/file/d/11JzhVWw2v9m7482J87RAJRpr0WM1e6JI/view?usp=sharing)
+   -  [百度](https://pan.baidu.com/s/1f2OXmuxMFKDYLtpCGV_NSw)提取码:pale
 
     2.用写卡工具写入tf卡，直接装机运行即可。
 
