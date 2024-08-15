@@ -61,7 +61,7 @@
 other:
 
 	1.Download palera1nbox img for NEO
-   -  [google](https://drive.google.com/file/d/11JzhVWw2v9m7482J87RAJRpr0WM1e6JI/view?usp=sharing)
+   -  [google](https://drive.google.com/drive/folders/1dJ0MHaLiGA3qyHK-HXtDJz3COD-yDQUt?usp=sharing)
    -  [baidu](https://pan.baidu.com/s/1f2OXmuxMFKDYLtpCGV_NSw)提取码:pale
 
 	2.Etcher To SD card
