@@ -23,12 +23,12 @@ oled.setHorizontalMode()
 # Variables
 current_menu = 'main'
 cursor_position = 0
-rootless_options = {'Verbose': True, 'Safe Mode': False, 'Force Revert': False, 'Debug': False}
-rootfull_options = {'Create FakeFS': False, 'Create BindFS': False, 'Verbose': True, 'Safe Mode': False, 'Restore RootFS': False, 'Debug': False}
+rootless_options = {'Safe Mode': False, 'Force Revert': False, 'Verbose': False, 'Debug': False}
+rootfull_options = {'Create FakeFS': False, 'Create BindFS': False, 'Safe Mode': False, 'Restore RootFS': False, 'Verbose': False, 'Debug': False}
 recover_options={'Exit Recovery':True}
 # Mappage des arguments
-rootless_arg_map = {'Verbose': '--verbose-boot ', 'Safe Mode': '--safe-mode ', 'Force Revert': '--force-revert ', 'Debug': '--debug-logging '}
-rootfull_arg_map = {'Create FakeFS': '--setup-fakefs ', 'Create BindFS': '--setup-partial-fakefs ', 'Verbose': '--verbose-boot ', 'Safe Mode': '--safe-mode ', 'Restore RootFS': '--force-revert ', 'Debug': '--debug-logging '}
+rootless_arg_map = {'Safe Mode': '--safe-mode ', 'Force Revert': '--force-revert ', 'Verbose': '--verbose-boot ', 'Debug': '--debug-logging '}
+rootfull_arg_map = {'Create FakeFS': '--setup-fakefs ', 'Create BindFS': '--setup-partial-fakefs ', 'Safe Mode': '--safe-mode ', 'Restore RootFS': '--force-revert ', 'Verbose': '--verbose-boot ', 'Debug': '--debug-logging '}
 recover_arg_map={'Exit Recovery':'--exit-recovery'}
 
 # Options de menu
@@ -189,6 +189,7 @@ def execute_command(root_type, options):
             cmd += args_map[option].strip().split()
     if root_type == 'rootfull':
         cmd.append('--fakefs')
+    #print(f'{cmd}')
     process = subprocess.Popen(cmd)
     background_processes.append(process)
 
