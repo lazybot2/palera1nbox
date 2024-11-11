@@ -23,8 +23,8 @@ oled.setHorizontalMode()
 # Variables
 current_menu = 'main'
 cursor_position = 0
-rootless_options = {'Safe Mode': False, 'Force Revert': False, 'Verbose': False, 'Debug': False}
-rootfull_options = {'Create FakeFS': False, 'Create BindFS': False, 'Safe Mode': False, 'Restore RootFS': False, 'Verbose': False, 'Debug': False}
+rootless_options = {'Safe Mode': False, 'Force Revert': False, 'Verbose': True, 'Debug': False}
+rootfull_options = {'Create FakeFS': False, 'Create BindFS': False, 'Safe Mode': False, 'Restore RootFS': False, 'Verbose': True, 'Debug': False}
 recover_options={'Exit Recovery':True}
 # Mappage des arguments
 rootless_arg_map = {'Safe Mode': '--safe-mode ', 'Force Revert': '--force-revert ', 'Verbose': '--verbose-boot ', 'Debug': '--debug-logging '}

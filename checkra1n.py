@@ -31,7 +31,7 @@ menu_options = {
 }
 current_menu = 'main'
 cursor_position = 0
-options = {'Safe Mode': False, 'Verbose': False, 'Quick Mode': False, 'Revert': False}
+options = {'Safe Mode': False, 'Verbose': True, 'Quick Mode': False, 'Revert': False}
 arg_map = {'Safe Mode': '--safe-mode', 'Verbose': '--verbose-boot', 'Quick Mode': '--quick', 'Revert': '--force-revert'}
 background_processes = []
 
