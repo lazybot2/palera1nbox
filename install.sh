@@ -21,12 +21,16 @@ esac
 usermod -a lazybot -G root
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get install -y i2c-tools git wget vim python3-dev python3-pil python3-smbus python3-pip python3-serial
+sudo apt-get install -y i2c-tools git curl wget vim python3-dev python3-pil python3-smbus python3-pip python3-serial \
+ iperf3 psmisc bc expect dialog network-manager sunxi-tools \
+ debconf-utils unzip dirmngr software-properties-common psmisc jq
 sudo pip3 install --upgrade setuptools
 sudo pip3 install sh
 sudo pip3 install wheel
 sudo pip3 install psutil
-sudo apt-get install -y  libc6 libncurses5 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libatk1.0-0 libgdk-pixbuf2.0-0 libglib2.0-0 libfontconfig1 libfreetype6 libgtk-3-0 libusb-1.0-0 libplist3 usbmuxd ideviceinstaller python3-imobiledevice libimobiledevice-utils python3-plist ifuse libusbmuxd-tools  libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev build-essential checkinstall autoconf automake libtool-bin
+sudo apt-get install -y  libc6 libncurses5 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libatk1.0-0 libgdk-pixbuf2.0-0 libglib2.0-0 libfontconfig1 \
+ libfreetype6 libgtk-3-0 libusb-1.0-0 libplist3 usbmuxd ideviceinstaller python3-imobiledevice libimobiledevice-utils python3-plist ifuse libusbmuxd-tools \
+ libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev build-essential checkinstall autoconf automake libtool-bin
 if [ ! -f /usr/local/bin/oled-start ]; then
     cat >/usr/local/bin/oled-start <<EOL
 #!/bin/sh
@@ -50,12 +54,10 @@ esac
 sudo chmod +x ./NanoHatOLED
 sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
-# Install dependencies
-apt install git iperf3 psmisc curl bc expect dialog network-manager sunxi-tools \
-debconf-utils unzip dirmngr software-properties-common psmisc jq
 
 git clone https://github.com/armbian/config
 cd config
 bash debian-config
+
 sudo armbian-config
 

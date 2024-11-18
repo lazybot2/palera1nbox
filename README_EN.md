@@ -12,9 +12,9 @@
 ---    
 
 1.Download Armbian - Armbian Jammy
--   [NanoPi Neo](https://www.armbian.com/nanopi-neo/)
+-   [NanoPi Neo](https://k-space.ee.armbian.com/oldarchive/nanopineo/archive/Armbian_23.8.1_Nanopineo_jammy_current_6.1.47.img.xz)
    
--   [NanoPi Neo2](https://www.armbian.com/nanopi-neo-2/)
+-   [NanoPi Neo2](https://k-space.ee.armbian.com/oldarchive/nanopineo2/archive/Armbian_23.8.1_Nanopineo2_jammy_current_6.1.47.img.xz)
 
 2.Balena Etcher for burning the SD card
 

@@ -42,8 +42,8 @@ NaonPi NEO(2)越狱盒子
 ## 越狱盒子制作
  
 1.下载Armbian固件 - 下载 Jammy 版本
->   [NanoPi Neo](https://www.armbian.com/nanopi-neo/)
->   [NanoPi Neo2](https://www.armbian.com/nanopi-neo-2/)
+>   [NanoPi Neo](https://k-space.ee.armbian.com/oldarchive/nanopineo/archive/Armbian_23.8.1_Nanopineo_jammy_current_6.1.47.img.xz)
+>   [NanoPi Neo2](https://k-space.ee.armbian.com/oldarchive/nanopineo2/archive/Armbian_23.8.1_Nanopineo2_jammy_current_6.1.47.img.xz)
 
 2.下载tf卡写卡工具Etcher
 
