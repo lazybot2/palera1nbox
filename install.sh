@@ -56,10 +56,16 @@ esac
 sudo chmod +x ./NanoHatOLED
 sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
+case $nanopi in
+    0)
+    git clone https://github.com/armbian/config
+    cd config
+    bash debian-config
+    ;;
+    1)
+    sudo armbian-config
+    ;;
+esac
 
-git clone https://github.com/armbian/config
-cd config
-bash debian-config
 
-sudo armbian-config
 
