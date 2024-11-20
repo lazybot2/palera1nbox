@@ -21,9 +21,7 @@ esac
 usermod -a lazybot -G root
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get install -y i2c-tools git curl wget vim python3-dev python3-pil python3-smbus python3-pip python3-serial \
- iperf3 psmisc bc expect dialog network-manager sunxi-tools \
- debconf-utils unzip dirmngr software-properties-common psmisc jq
+sudo apt-get install -y i2c-tools git wget vim python3-dev python3-pil python3-smbus python3-pip python3-serial 
 sudo pip3 install --upgrade setuptools
 sudo pip3 install sh
 sudo pip3 install wheel
@@ -57,17 +55,9 @@ esac
 sudo chmod +x ./NanoHatOLED
 sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
-case $nanopi in
-    0)
-    git clone https://github.com/armbian/config
-    cd config
-    bash debian-config
-    ;;
-    1)
-    sudo apt-get install -y armbian-config
-    sudo armbian-config
-    ;;
-esac
+sudo apt-get install -y armbian-config=24.2.1
+sudo armbian-config
+
 
 
 
