@@ -56,6 +56,10 @@ sudo chmod +x ./NanoHatOLED
 sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
 sudo apt-get install -y armbian-config=24.2.1
+du -h /var/cache/apt/archives
+sudo apt-get autoclean
+sudo apt-get clean
+sudo apt-get autoremove
 sudo armbian-config
 
 
