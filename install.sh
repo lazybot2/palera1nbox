@@ -22,10 +22,10 @@ usermod -a lazybot -G root
 sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get install -y i2c-tools git wget vim gcc python3 python3-dev python3-pil python3-smbus python3-pip python3-serial 
-pip3 install --upgrade setuptools
-pip3 install sh
-pip3 install wheel
-pip3 install psutil
+sudo pip3 install --upgrade setuptools
+sudo pip3 install sh
+sudo pip3 install wheel
+sudo pip3 install psutil
 sudo apt-get install -y  libc6 libncurses5 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libatk1.0-0 libgdk-pixbuf2.0-0 libglib2.0-0 libfontconfig1 \
  libfreetype6 libgtk-3-0 libusb-1.0-0 libplist3 usbmuxd ideviceinstaller python3-imobiledevice libimobiledevice-utils python3-plist ifuse libusbmuxd-tools \
  libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev libssl-dev libffi-dev
@@ -79,7 +79,7 @@ sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
 sudo rm -rf ./.git
 sudo rm -rf ./doc
-sudo apt-get remove -y gcc
+sudo apt-get remove -y gcc git wget curl vim
 du -h /var/cache/apt/archives
 sudo apt-get autoclean -y
 sudo apt-get clean -y
