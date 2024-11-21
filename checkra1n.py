@@ -61,7 +61,7 @@ def display_menu_with_cursor():
 def run_checkra1n():
     out_en=False
     try:
-        subprocess.call(['sudo', 'systemctl', 'restart', 'usbmuxd'])
+        #subprocess.call(['sudo', 'systemctl', 'restart', 'usbmuxd'])
         cmd = ['sudo', f'{bash_path}checkra1n', '-c']
         cmd += [arg_map[option] for option, is_checked in options.items() if is_checked]
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, shell=False)
