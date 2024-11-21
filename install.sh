@@ -79,7 +79,7 @@ sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
 sudo rm -rf ./.git
 sudo rm -rf ./doc
-sudo apt-get remove -y gcc git wget curl vim
+sudo apt-get remove -y gcc
 du -h /var/cache/apt/archives
 sudo apt-get autoclean -y
 sudo apt-get clean -y
