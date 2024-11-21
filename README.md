@@ -65,6 +65,7 @@ NaonPi NEO(2)越狱盒子
         At your location, more locales are possible: 1 
 
 4.复制下面代码运行
+
     sudo apt-get update
     sudo apt-get install -y git
     git clone https://github.com/lazybot2/palera1nbox.git
