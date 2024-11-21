@@ -84,6 +84,9 @@ du -h /var/cache/apt/archives
 sudo apt-get autoclean -y
 sudo apt-get clean -y
 sudo apt-get autoremove -y
+du -sh /root/.cache
+sudo rm -rf /var/tmp/*
+sudo rm -rf /tmp/*
 git clone https://github.com/armbian/config
 cd config
 bash debian-config
