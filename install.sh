@@ -6,13 +6,21 @@ echo 'please select NanoPi'
 echo '0.NanoPi NEO'
 echo '1.NanoPi NEO2'
 echo '==========================='
-read nanopi
+if [ $(uname -m) = 'armv7l' ]; then
+    nanopi=0
+elif [ $(uname -m) = 'aarch64' ]; then
+    nanopi=1
+else
+	echo $(uname -m)
+    read nanopi
+fi
+
 case $nanopi in
     0)
-    echo 'select is NanoPi neo'
+    echo 'Select is NanoPi NEO'
     ;;
     1)
-    echo 'select is NanoPi neo2'
+    echo 'Select is NanoPi NEO2'
     ;;
     *)
     echo 'No'
@@ -29,26 +37,27 @@ sudo pip3 install psutil
 sudo apt-get install -y  libc6 libncurses5 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libatk1.0-0 libgdk-pixbuf2.0-0 libglib2.0-0 libfontconfig1 \
  libfreetype6 libgtk-3-0 libusb-1.0-0 libplist3 usbmuxd ideviceinstaller python3-imobiledevice libimobiledevice-utils python3-plist ifuse libusbmuxd-tools \
  libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev libssl-dev libffi-dev
-if [ ! -f /usr/bin/python3 ]; then
-    echo "/usr/bin/python3 not found, exiting."
-    exit 1
+
+
+if [ ! -f $PWD/NanoHatOLED ]; then
+    echo "======================="
+    echo " Compiled NanoHatOLED"
+    echo "======================="
+    if [ ! -f /usr/bin/python3 ]; then
+        echo "/usr/bin/python3 not found, exiting."
+        exit 1
+    fi
+    PY3_INTERP=`readlink /usr/bin/python3`
+    RET=$?
+    if [ $? -ne 0 ]; then
+        echo "No executable python3, exiting."
+        exit 1
+    fi
+    REAL_PATH=$(realpath $(dirname $0))
+    sed -i "/^#define.*PYTHON3_INTERP.*$/s/\".*\"/\"${PY3_INTERP}\"/" "${REAL_PATH}/Source/daemonize.h"
+    gcc Source/daemonize.c Source/main.c -lrt -lpthread -o NanoHatOLED
+    echo "Compiled NanoHatOLED"
 fi
-
-PY3_INTERP=`readlink /usr/bin/python3`
-RET=$?
-if [ $? -ne 0 ]; then
-    echo "No executable python3, exiting."
-    exit 1
-fi
-REAL_PATH=$(realpath $(dirname $0))
-sed -i "/^#define.*PYTHON3_INTERP.*$/s/\".*\"/\"${PY3_INTERP}\"/" "${REAL_PATH}/Source/daemonize.h"
-
-echo ""
-echo "Compiling with GCC ..."
-echo "======================="
-gcc Source/daemonize.c Source/main.c -lrt -lpthread -o NanoHatOLED
-echo "Compiled NanoHatOLED"
-
 if [ ! -f $PWD/NanoHatOLED ]; then
     echo "$PWD/NanoHatOLED not found, exiting."
     exit 1
