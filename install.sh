@@ -88,6 +88,7 @@ sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
 sudo rm -rf ./.git
 sudo rm -rf ./doc
+sudo rm -f ./*.md
 sudo apt-get remove -y gcc
 du -h /var/cache/apt/archives
 sudo apt-get autoclean -y
