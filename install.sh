@@ -91,9 +91,9 @@ sudo rm -rf ./doc
 sudo rm -f ./*.md
 sudo apt-get remove -y gcc
 du -h /var/cache/apt/archives
+sudo apt-get autoremove -y
 sudo apt-get autoclean -y
 sudo apt-get clean -y
-sudo apt-get autoremove -y
 du -sh /root/.cache
 sudo rm -rf /var/tmp/*
 sudo rm -rf /tmp/*
