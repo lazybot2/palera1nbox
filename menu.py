@@ -72,11 +72,17 @@ def execute_option():
 def navigate_options(signum, stack):
     global current_option_index,startTime
     if signum == signal.SIGUSR1:  # Bouton 1: navigation vers le haut
-        startTime = time.time()
-        current_option_index = (current_option_index - 1) % len(options)
+        if (time.time() - startTime) > outTime:
+            startTime = time.time()
+        else:
+            startTime = time.time()
+            current_option_index = (current_option_index - 1) % len(options)
     elif signum == signal.SIGUSR2:  # Bouton 2: navigation vers le bas
-        startTime = time.time()
-        current_option_index = (current_option_index + 1) % len(options)
+        if (time.time() - startTime) > outTime:
+            startTime = time.time()
+        else:
+            startTime = time.time()
+            current_option_index = (current_option_index + 1) % len(options)
     display_image()
     
 def validate_option(signum, stack):
