@@ -36,7 +36,7 @@ sudo pip3 install wheel
 sudo pip3 install psutil
 sudo apt-get install -y  libc6 libncurses5 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libatk1.0-0 libgdk-pixbuf2.0-0 libglib2.0-0 libfontconfig1 \
  libfreetype6 libgtk-3-0 libusb-1.0-0 libplist3 usbmuxd ideviceinstaller python3-imobiledevice libimobiledevice-utils python3-plist ifuse libusbmuxd-tools \
- libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev libssl-dev libffi-dev
+ libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev
 
 
 if [ ! -f $PWD/NanoHatOLED ]; then
@@ -64,15 +64,20 @@ if [ ! -f $PWD/NanoHatOLED ]; then
 fi
 
 if [ ! -f /usr/local/bin/oled-start ]; then
-    cat >/usr/local/bin/oled-start <<EOL
+cat >/usr/local/bin/oled-start <<EOL
 #!/bin/sh
 EOL
-    echo "rm -rf /tmp/* " >> /usr/local/bin/oled-start
-    echo "cd $PWD" >> /usr/local/bin/oled-start
-    echo "./NanoHatOLED" >> /usr/local/bin/oled-start
-    sed -i -e '$i \/usr/local/bin/oled-start\n' /etc/rc.local
+    echo "if [ \`i2cdetect -l | grep i2c | awk '{print \$1}'\` ]; then" >> /usr/local/bin/oled-start
+    echo "  cp -rf $PWD/* /tmp" >> /usr/local/bin/oled-start
+    echo "  cd /tmp" >> /usr/local/bin/oled-start
+    echo "  ./NanoHatOLED" >> /usr/local/bin/oled-start
+    echo "else" >> /usr/local/bin/oled-start
+    echo "  reboot" >> /usr/local/bin/oled-start
+    echo "fi" >> /usr/local/bin/oled-start
     chmod 755 /usr/local/bin/oled-start
+    sed -i -e '$i \/usr/local/bin/oled-start\n' /etc/rc.local
 fi
+
 case $nanopi in
     0)
     wget -O checkra1n https://assets.checkra.in/downloads/linux/cli/arm/ff05dfb32834c03b88346509aec5ca9916db98de3019adf4201a2a6efe31e9f5/checkra1n
@@ -89,14 +94,12 @@ sudo chmod +x ./palera1n
 sudo rm -rf ./.git
 sudo rm -rf ./doc
 sudo rm -f ./*.md
-sudo apt-get remove -y gcc
-du -h /var/cache/apt/archives
+sudo rm -rf ./Source
 sudo apt-get autoremove -y
 sudo apt-get autoclean -y
 sudo apt-get clean -y
-du -sh /root/.cache
 sudo rm -rf /var/tmp/*
-sudo rm -rf /tmp/*
+sudo rm -rf /var/lib/apt/lists/*
 git clone https://github.com/armbian/config
 cd config
 bash debian-config
