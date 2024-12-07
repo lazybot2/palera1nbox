@@ -94,11 +94,6 @@ sudo rm -rf ./.git
 sudo rm -rf ./doc
 sudo rm -f ./*.md
 sudo rm -rf ./Source
-sudo apt-get autoremove -y
-sudo apt-get autoclean -y
-sudo apt-get clean -y
-sudo rm -rf /var/tmp/*
-sudo rm -rf /var/lib/apt/lists/*
 git clone https://github.com/armbian/config
 cd config
 bash debian-config
