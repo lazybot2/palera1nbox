@@ -31,7 +31,7 @@ THE SOFTWARE.
 #ifndef __DAEMONIZE__H__
 #define __DAEMONIZE__H__
 
-#define DEBUG           1
+#define DEBUG           0
 #define LOG_FILE_NAME   "/tmp/nanohat-oled.log"
 #define LOCKFILE        "/var/run/nanohat-oled.pid"
 
