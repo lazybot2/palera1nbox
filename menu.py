@@ -30,15 +30,27 @@ options = [
     {"image": f"{bash_path}menu_reboot.png", "command": "sudo shutdown -r now"}
 ]
 
-current_option_index = 0
+current_option_index = 2
 in_reboot_confirmation = False
 reboot_confirmation_option = "YES"  # Commence par "YES"
 startTime = time.time()
 outTime = 30
 def display_image():
     image_path = options[current_option_index]['image']
-    image = Image.open(image_path)
-    oled.drawImage(image.convert('1'))  # Convertit l'image en noir et blanc
+    image = Image.open(image_path).convert('1')
+    if current_option_index==len(options) - 1:
+        draw=ImageDraw.Draw(image)
+        tempI = int(open('/sys/class/thermal/thermal_zone0/temp').read())
+        if tempI > 1000:
+            tempI = tempI / 1000
+        tempVal = str(round(tempI, 1)) + '°C'
+        arch = subprocess.check_output('arch', shell=True)
+        arch = str(arch.decode('UTF-8'))
+        draw.text((76, 0), arch, font=font14, fill=255)
+        draw.text((76, 21), tempVal, font=font14, fill=255)
+    oled.drawImage(image)
+
+
 
 def display_reboot_confirmation():
     global reboot_confirmation_option
@@ -54,7 +66,13 @@ def display_reboot_confirmation():
         draw.rectangle((60, 20, 100, 35), outline=255, fill=255)  # Rectangle blanc pour "NO"
         draw.text((10, 20), "YES", font=font14, fill=255)  # Texte en blanc pour "YES"
         draw.text((60, 20), "NO", font=font14, fill=0)  # Texte en noir
-
+    cmd = "hostname -I | cut -d\' \' -f1"
+    IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
+    if len(IP) < 2:
+        IP = ' no network'
+    else:
+        IP="IP:" + IP
+    draw.text((0, 42), IP, font=font14, fill=255)  # Texte en blanc pour "YES"
     oled.drawImage(image)
 
 def execute_option():
@@ -159,6 +177,6 @@ if __name__ == "__main__":
             signal.signal(signal.SIGUSR2, navigate_options)
             signal.signal(signal.SIGALRM, validate_option)
             Close_EN=True
-        time.sleep(0.2)
+        #time.sleep(0.2)
         
         
