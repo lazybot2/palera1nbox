@@ -30,7 +30,7 @@ options = [
     {"image": f"{bash_path}menu_reboot.png", "command": "sudo shutdown -r now"}
 ]
 
-current_option_index = 2
+current_option_index = 0
 in_reboot_confirmation = False
 reboot_confirmation_option = "YES"  # Commence par "YES"
 startTime = time.time()

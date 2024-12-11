@@ -11,7 +11,7 @@ if [ $(uname -m) = 'armv7l' ]; then
 elif [ $(uname -m) = 'aarch64' ]; then
     nanopi=1
 else
-	echo $(uname -m)
+    echo $(uname -m)
     read nanopi
 fi
 
