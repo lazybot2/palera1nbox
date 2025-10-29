@@ -177,7 +177,7 @@ while true;do
                         sleep 1
                         if grep -q "Finally" ./run.log; then
                             echo "Jailbroken completed"
-                            sleep 5
+                            sleep 10
                             exit
                         fi
                     done
@@ -190,9 +190,8 @@ while true;do
                         sleep 1
                         if grep -q "Sent bootux" ./run.log; then
                             cp -f $PTE ./JB
-                            sleep 2
                             echo "IPhone startup completed"
-                            sleep 5
+                            sleep 10
                             exit
                         fi
                     done
@@ -203,7 +202,7 @@ while true;do
                         sleep 1
                         if grep -q ".bin saved to" ./run.log; then
                             echo -e "pte bin YES"
-                            sleep 13
+                            sleep 15
                             break
                         fi
                     done
@@ -225,14 +224,16 @@ while true;do
                                 sleep 1
                                 if grep -q "DONE" ./run.log; then
                                     echo "IPhone flashing Ok"
-                                    sleep 13
+                                    sleep 15
                                     update=1
                                     break
                                 fi
                                 sleep 3
                                 break
                             else
-                                echo "no find ispw"
+                                echo "fIles: $ISPW"
+                                echo "No Find"
+                                sleep 10
                                 exit
                             fi
                         elif [[ $tmp -eq 1 ]];then
@@ -242,7 +243,7 @@ while true;do
                                 sleep 1
                                 if grep -q ".bin saved to" ./run.log; then
                                     echo -e "current sch bin Ok"
-                                    sleep 13
+                                    sleep 15
                                     break
                                 fi
                             done
@@ -258,15 +259,16 @@ while true;do
                             sleep 1
                             if grep -q "DONE" ./run.log; then
                                echo "IPhone flashing Ok"
-                                sleep 13
+                                sleep 15
                                 update=1
                                 break
                             fi
                             sleep 3
                             break
                         else
-                            echo "no find ispw"
-                            sleep 5
+                            echo "fIles: $ISPW"
+                            echo "No Find"
+                            sleep 10
                             exit
                         fi
                     fi
@@ -280,14 +282,15 @@ while true;do
                             sleep 1
                             if grep -q ".bin saved to" ./run.log; then
                                 echo -e "sch bin Yes"
-                                sleep 10
+                                sleep 15
                                 break
                             fi
                         done
                         break
                     else
-                        echo "no find ispw"
-                        sleep 5
+                        echo "fIles: $ISPW"
+                        echo "No Find"
+                        sleep 10
                         exit
                     fi
                 fi
@@ -362,13 +365,14 @@ while true;do
                         sleep 1
                         if grep -q "DONE" ./run.log; then
                             echo "IPhone flashing Ok"
-                            sleep 13
+                            sleep 15
                             update=1
                             break
                         fi
                     else
-                        echo "no find ispw"
-                        sleep 5
+                        echo "fIles: $ISPW"
+                        echo "No Find"
+                        sleep 10
                         exit
                     fi
                 fi
