@@ -36,7 +36,7 @@ pip3 install wheel
 pip3 install psutil
 sudo apt-get install -y  libc6 libncurses5 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libatk1.0-0 libgdk-pixbuf2.0-0 libglib2.0-0 libfontconfig1 \
  libfreetype6 libgtk-3-0 libusb-1.0-0 libplist3 usbmuxd ideviceinstaller python3-imobiledevice libimobiledevice-utils python3-plist ifuse libusbmuxd-tools \
- libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev
+ libjpeg-dev pkg-config libplist-dev libreadline-dev libusb-1.0-0-dev irecovery
 
 if [ ! -f $PWD/NanoHatOLED ]; then
     echo "======================="
@@ -67,8 +67,7 @@ cat >/usr/local/bin/oled-start <<EOL
 #!/bin/sh
 EOL
     echo "if [ \`i2cdetect -l | grep i2c | awk '{print \$1}'\` ]; then" >> /usr/local/bin/oled-start
-    echo "  cp -rf $PWD/* /tmp" >> /usr/local/bin/oled-start
-    echo "  cd /tmp" >> /usr/local/bin/oled-start
+    echo "  cd $PWD/" >> /usr/local/bin/oled-start
     echo "  ./NanoHatOLED" >> /usr/local/bin/oled-start
     echo "else" >> /usr/local/bin/oled-start
     echo "  reboot" >> /usr/local/bin/oled-start
@@ -81,15 +80,20 @@ case $nanopi in
     0)
     wget -O checkra1n https://assets.checkra.in/downloads/linux/cli/arm/ff05dfb32834c03b88346509aec5ca9916db98de3019adf4201a2a6efe31e9f5/checkra1n
     wget -O palera1n https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.7/palera1n-linux-armel
+    mv -f menu_neo.py menu.py
     ;;
     1)
     wget -O checkra1n https://assets.checkra.in/downloads/linux/cli/arm64/43019a573ab1c866fe88edb1f2dd5bb38b0caf135533ee0d6e3ed720256b89d0/checkra1n
     wget -O palera1n https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.7/palera1n-linux-arm64
+    mv -f menu_neo2.py menu.py
     ;;
 esac
 sudo chmod +x ./NanoHatOLED
 sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
+sudo chmod +x ./turdus_merula
+sudo chmod +x ./turdusra1n
+if
 sudo rm -rf ./.git
 sudo rm -rf ./doc
 sudo rm -f ./*.md
