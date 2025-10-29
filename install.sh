@@ -98,6 +98,9 @@ sudo rm -rf ./.git
 sudo rm -rf ./doc
 sudo rm -f ./*.md
 sudo rm -rf ./Source
+if [ ! -d ./IPSW ];then
+    mkdir IPSW
+fi
 cd $home
 git clone https://github.com/armbian/config.git
 cd config
