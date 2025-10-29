@@ -179,12 +179,22 @@ def exit_program():
     exit(0)
 
 def display_start():
+    cmd = "hostname -I | cut -d\' \' -f1"
+    IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
+    if len(IP) < 2:
+        IP ="Not WiFi lazy 12345678"
+    else:
+        IP="IP:"+IP.strip( '\n')
+
     ver_text='For A9(X)A10(X)'
     ver_text_width,ver_text_hight=draw.textsize(ver_text, font=font14)
+    IP_width,IP_hight=draw.textsize(IP, font=font_small)
+
     image_path = f"{bash_path}turdus.png"
     anim_img = Image.open(image_path).convert('1')
     draw1=ImageDraw.Draw(anim_img)
-    for i in range(1, len(ver_text)+1):  
+    draw1.text((width-IP_width-6,height-IP_hight-ver_text_hight-7), IP, font=font_small, fill=255)  
+    for i in range(1, len(ver_text)+1):
         draw1.text((width-ver_text_width-2,height-ver_text_hight-3), ver_text[0:i], font=font14, fill=255)
         oled.drawImage(anim_img)
     return 1

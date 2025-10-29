@@ -19,7 +19,7 @@ oled.setNormalDisplay()
 oled.setHorizontalMode()
 
 font14 = ImageFont.truetype('DejaVuSansMono.ttf', 14)
-
+font12 = ImageFont.truetype('DejaVuSansMono.ttf', 12)
 # Création de l'image et du contexte de dessin
 image = Image.new('1', (width, height))
 draw = ImageDraw.Draw(image)
@@ -73,7 +73,7 @@ def display_reboot_confirmation():
         IP = ' no network'
     else:
         IP="IP:" + IP
-    draw.text((0, 42), IP, font=font14, fill=255)  # Texte en blanc pour "YES"
+    draw.text((0, 42), IP, font=font12, fill=255)  # Texte en blanc pour "YES"
     oled.drawImage(image)
 
 def execute_option():
