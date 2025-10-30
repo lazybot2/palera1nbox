@@ -80,12 +80,12 @@ case $nanopi in
     0)
     wget -O checkra1n https://assets.checkra.in/downloads/linux/cli/arm/ff05dfb32834c03b88346509aec5ca9916db98de3019adf4201a2a6efe31e9f5/checkra1n
     wget -O palera1n https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.7/palera1n-linux-armel
-    mv -f menu_neo.py menu.py
+    cp -f menu_neo.py menu.py
     ;;
     1)
     wget -O checkra1n https://assets.checkra.in/downloads/linux/cli/arm64/43019a573ab1c866fe88edb1f2dd5bb38b0caf135533ee0d6e3ed720256b89d0/checkra1n
     wget -O palera1n https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.7/palera1n-linux-arm64
-    mv -f menu_neo2.py menu.py
+    cp -f menu_neo2.py menu.py
     ;;
 esac
 sudo chmod +x ./NanoHatOLED
