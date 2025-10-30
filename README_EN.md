@@ -57,6 +57,35 @@
 
     Save and reboot
 
+* Palera1n function menu
+
+> Support IOS15-16.x system, palera1n official website. The box version is: v2.0.0 beta 7
+
+> Function menu: Rootless (no root jailbreak) --Rootfull (rooted jailbreak) --Exit Recovery (exit recovery mode) --Exit (exit back to the main menu)
+
+> Submenu: Options --Start --Back
+
+> Rooted Jailbreak Submenu: Create FakeFs (First Full Jailbreak (Support 32G and above phones)--Create BindFS (16G must choose this for the first jailbreak)--Safe Mode (Jailbreak into safe mode)--Restore RootFs (Clear Jailbreak)
+
+> (The asterisk is selected) Press the rightmost button to change the selected state, and you can only choose one of the above four options. After the first jailbreak, you don't need to choose to boot the boot, just start directly.
+
+* Checkra1n功能菜单
+
+> Support IOS12-14.x, checkra1n official website. The box version is: 0.12.4
+
+> Submenu setting: Options(Settings)--Run Checkran--Stop Checkra1n(Close Checkra1n process)--Exit(Return to the main menu)
+
+> Submenu setting: Safe Mode - Revert is selected when there is an asterisk, and no need to set it for normal jailbreak.
+
+* Turdus function menu
+
+> Support A9(X) A10(X) no shsh downgrade, turdus merula official website. Now available for support Neo2
+
+> Function menu: Options (Settings) --Run turdus (start fully automatic downgrade boot) --Stop turdus (Close turdus process) --Exit (Return to the main menu)
+
+> Sub-menu settings: Safe Mode - Revert (clear the local phone archive, used when the downgrade process is abnormal) is selected when there is an asterisk, and no need to set it for normal use.
+
+* ReBoot (for rebooting the box)
 
 other:
 
