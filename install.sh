@@ -93,7 +93,6 @@ sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
 sudo chmod +x ./turdus_merula
 sudo chmod +x ./turdusra1n
-if
 sudo rm -rf ./.git
 sudo rm -rf ./doc
 sudo rm -f ./*.md
@@ -105,7 +104,3 @@ cd $home
 git clone https://github.com/armbian/config.git
 cd config
 bash debian-config
-
-
-
-
