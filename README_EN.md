@@ -44,7 +44,7 @@
     sudo chmod +x ./install.sh
     sudo ./install.sh
 
--   select NanoPi：0 或 1
+-   select NanoPi：0 or 1
 
 -   0.NanoPi NEO
 -   1.NanoPi NEO2
@@ -69,7 +69,7 @@
 
 > (The asterisk is selected) Press the rightmost button to change the selected state, and you can only choose one of the above four options. After the first jailbreak, you don't need to choose to boot the boot, just start directly.
 
-* Checkra1n功能菜单
+* Checkra1n function menu
 
 > Support IOS12-14.x, checkra1n official website. The box version is: 0.12.4
 
@@ -91,7 +91,7 @@ other:
 
 	1.Download palera1nbox img for NEO
    -  [google](https://drive.google.com/drive/folders/1dJ0MHaLiGA3qyHK-HXtDJz3COD-yDQUt?usp=sharing)
-   -  [baidu](https://pan.baidu.com/s/1v_ai5yPQtnU9-sPLJFLSgg?pwd=pale)提取码:pale
+   -  [baidu](https://pan.baidu.com/s/1v_ai5yPQtnU9-sPLJFLSgg?pwd=pale)extraction code:pale
 
 	2.Etcher To SD card
 
