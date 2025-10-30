@@ -29,6 +29,15 @@ NaonPi NEO(2)越狱盒子
 
 > 子菜单设置：Safe Mode(安全模式)--Revert(清除越狱) 有星号时为选定，正常越狱无须设置。
 
+* Turdus功能菜单
+
+> 支持A9(X)A10(X)无shsh降级,[turdus merula官网](https://sep.lol/)。现在供支持Neo2
+
+> 功能菜单：Options(设置)--Run turdus(开始全自动降级引导)--Stop turdus(关闭turdus进程)--Exit(返回主菜单)
+
+> 子菜单设置：Safe Mode(安全模式)--Revert(清除本地手机存档，当降级过程异常时使用) 有星号时为选定，正常使用无须设置。
+
+
 * ReBoot(用于重启盒子)
 
 * 其它功能
