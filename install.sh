@@ -93,13 +93,20 @@ sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
 sudo chmod +x ./turdus_merula
 sudo chmod +x ./turdusra1n
+if [ $(uname -m) = 'aarch64' ]; then
+    cd udev-media-automount-master
+    sudo make install
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
+    sudo rm -rf ./udev-media-automount-master
+    if [ ! -d ./IPSW ];then
+        mkdir IPSW
+    fi
+fi
 sudo rm -rf ./.git
 sudo rm -rf ./doc
 sudo rm -f ./*.md
 sudo rm -rf ./Source
-if [ ! -d ./IPSW ];then
-    mkdir IPSW
-fi
 cd $home
 git clone https://github.com/armbian/config.git
 cd config
