@@ -182,7 +182,7 @@ def display_start():
     cmd = "hostname -I | cut -d\' \' -f1"
     IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
     if len(IP) < 2:
-        IP ="Not WiFi lazy 12345678"
+        IP ="No Network"
     else:
         IP="IP:"+IP.strip( '\n')
 
