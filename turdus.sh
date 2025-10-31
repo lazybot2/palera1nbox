@@ -125,7 +125,22 @@ get_ecid(){
     fi
 }
 
-
+if true;then
+    file_name=("6s" "6sp" "5se" "ipad97" "ipad5" "i7" "i7p" "ipod7" "ipad7" "ipadp129-2" "ipadp10")
+    usb_path="/media/"
+    ipsw_path="/root/palera1nbox/IPSW/"
+    # 使用for循环遍历数组
+    for name in "${file_name[@]}"
+    do
+        copyfile=`find "$usb_path" -maxdepth 4 -name "$name.ipsw"`
+        if [[ -f $copyfile ]];then
+            echo "copy $name.ipsw to IPSW/"
+            sleep 10
+            rsync -avP "$copyfile" "$ipsw_path"
+            sleep 10
+        fi
+    done
+fi
 echo "Lazy Bot Auto turdus" 
 echo "Tethered Downgrade Guide"
 echo "For A9(X) A10(X)"
