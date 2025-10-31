@@ -110,4 +110,4 @@ fi
 #git clone https://github.com/armbian/config.git
 #cd config
 #bash debian-config
-sudo debian-config
+sudo armbian-config
