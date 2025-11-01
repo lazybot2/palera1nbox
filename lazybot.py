@@ -33,7 +33,7 @@ def navigate_options(signum, stack):
     elif signum == signal.SIGALRM:  # Bouton 2: navigation vers le bas
         print("SIGUSR3")
     command = f"sudo python3 {bash_path}menu.py"
-    subprocess.Popen(command, shell=True, start_new_session=True ,executable='bash')
+    subprocess.Popen(command, shell=True, start_new_session=True)
     os.killpg(0, signal.SIGTERM)  # Tue tous les processus dans le groupe actuel
 
 
@@ -74,4 +74,4 @@ if __name__ == "__main__":
     bb(text,name)
     #print(f'run python3 {bash_path}menu.py')
     command = f"sudo python3 {bash_path}menu.py"
-    subprocess.Popen(command, shell=True, start_new_session=True ,executable='bash')
+    subprocess.Popen(command, shell=True, start_new_session=True)
