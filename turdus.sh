@@ -396,7 +396,7 @@ while true;do
                     fi
                 fi
             else
-                echo "not supported the iphone"
+                echo "not supported the device"
                 echo "ECID:$ID"
                 echo "$i_CPID"
                 sleep 15
@@ -404,7 +404,7 @@ while true;do
             fi
         else
             if [ $tip_con -eq 0 ];then
-                echo -e "waiting connect iphone"
+                echo -e "waiting connect device"
                 while true;do 
                     get_ecid
                     if [ $tip_con -eq 1 ];then
