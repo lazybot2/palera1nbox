@@ -76,6 +76,9 @@ def run_checkra1n():
                 output_lines.append(line)
             display_message_scroll(output_lines)  # Met à jour l'affichage avec scroll
             #print(line.strip())
+            if "All Done" in line:
+                time.sleep(3)
+                exit_program()
     except Exception as e:
         display_message(f"Erreur: {e}")
 

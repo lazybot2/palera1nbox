@@ -180,7 +180,7 @@ while true;do
                     sleep 3
                 fi
                 if [ $CHK ];then
-                    echo "Run Jailbroken Start"
+                    echo "Jailbroken the device"
                     sleep 3
                     while true;
                     do  
@@ -191,21 +191,23 @@ while true;do
                         fi
                         sleep 1
                         if grep -q "Finally" ./run.log; then
-                            echo "Jailbroken completed"
-                            sleep 10
+                            echo "Jailbroken device Ok"
+                            sleep 5
+                            echo "All Done"
+                            sleep 5
                             exit
                         fi
                     done
                     exit
                 elif [ $PTE ];then
-                    echo "IPhone startup..."
+                    echo "Booting the device"
                     while true;
                     do
                         $turdusra1n -TP $PTE | tee ./run.log
                         sleep 1
                         if grep -q "Sent bootux" ./run.log; then
                             cp -f $PTE ./JB
-                            echo "IPhone startup completed"
+                            echo "Booting device Ok"
                             sleep 10
                             exit
                         fi
@@ -216,7 +218,7 @@ while true;do
                         $turdusra1n -g -i $SEP -C $CURRENT | tee ./run.log
                         sleep 1
                         if grep -q ".bin saved to" ./run.log; then
-                            echo -e "pte bin YES"
+                            echo -e "pteblock Ok"
                             sleep 15
                             break
                         fi
@@ -230,7 +232,7 @@ while true;do
                             tmp=2
                         fi
                         if [[ $tmp -eq 2 ]];then
-                            echo "IPhone flashing"
+                            echo "Restoring the device"
                             sleep 3
                             if [ -f "$ISPW" ] ;then
                                 $turdusra1n -D
@@ -238,7 +240,7 @@ while true;do
                                 $turdus_merula -y -o --load-shcblock $RESTORE $ISPW  | tee ./run.log
                                 sleep 1
                                 if grep -q "DONE" ./run.log; then
-                                    echo "IPhone flashing Ok"
+                                    echo "Restoring Ok"
                                     sleep 15
                                     update=1
                                     break
@@ -257,7 +259,7 @@ while true;do
                                 $turdusra1n -g | tee ./run.log
                                 sleep 1
                                 if grep -q ".bin saved to" ./run.log; then
-                                    echo -e "current sch bin Ok"
+                                    echo -e "current shcblock OK"
                                     sleep 15
                                     break
                                 fi
@@ -265,7 +267,7 @@ while true;do
                             break
                         fi
                     else
-                        echo "IPhone flashing"
+                        echo "Restoring the device"
                         sleep 3
                         if [ -f "$ISPW" ] ;then
                             $turdusra1n -D
@@ -273,7 +275,7 @@ while true;do
                             $turdus_merula -y -o --load-shcblock $RESTORE $ISPW  | tee ./run.log
                             sleep 1
                             if grep -q "DONE" ./run.log; then
-                               echo "IPhone flashing Ok"
+                               echo "Restoring Ok"
                                 sleep 15
                                 update=1
                                 break
@@ -296,7 +298,7 @@ while true;do
                             $turdus_merula -y --get-shcblock $ISPW | tee ./run.log
                             sleep 1
                             if grep -q ".bin saved to" ./run.log; then
-                                echo -e "sch bin Yes"
+                                echo -e "shcblock Ok"
                                 sleep 15
                                 break
                             fi
@@ -334,7 +336,7 @@ while true;do
                     sleep 3
                 fi
                 if [[ -f $JB_BOOTIMG ]] && [[ -f $JB_SEPI ]] && [[ -f $JB_SEPP ]];then
-                    echo "Run Jailbroken Start"
+                    echo "Jailbroken the device"
                     sleep 3
                     while true;
                     do  
@@ -345,14 +347,16 @@ while true;do
                         fi
                         sleep 1
                         if grep -q "Finally" ./run.log; then
-                            echo "Jailbroken completed"
-                            sleep 10
+                            echo "Jailbroken device Ok"
+                            sleep 5
+                            echo "All Done"
+                            sleep 5
                             exit
                         fi
                     done
                     exit
                 elif [[ -f $BOOTIMG ]] && [[ -f $SEPI ]] && [[ -f $SEPP ]];then
-                    echo "IPhone Startup"
+                    echo "Booting the device"
                     sleep 3
                     while true;
                     do
@@ -362,7 +366,7 @@ while true;do
                             cp -f $BOOTIMG ./JB
                             cp -f $SEPI ./JB
                             cp -f $SEPP ./JB
-                            echo "IPhone startup completed"
+                            echo "Booting device Ok"
                             sleep 10
                             exit
                         fi
@@ -371,7 +375,7 @@ while true;do
                 else
 
                     if [ -f "$ISPW" ] ;then
-                        echo "IPhone flashing"
+                        echo "Restoring the device"
                         sleep 3
                         update=0
                         $turdusra1n -D
@@ -379,7 +383,7 @@ while true;do
                         $turdus_merula -y -o $ISPW | tee ./run.log
                         sleep 1
                         if grep -q "DONE" ./run.log; then
-                            echo "IPhone flashing Ok"
+                            echo "Restoring Ok"
                             sleep 15
                             update=1
                             break
