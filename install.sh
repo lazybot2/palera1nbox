@@ -106,8 +106,7 @@ if [ $(uname -m) = 'aarch64' ]; then
     sudo udevadm control --reload-rules
     sudo udevadm trigger
 fi
-#cd $home
-#git clone https://github.com/armbian/config.git
-#cd config
-#bash debian-config
-sudo armbian-config
+cd $home
+git clone https://github.com/armbian/config.git
+cd config
+bash debian-config
