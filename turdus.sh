@@ -132,7 +132,7 @@ if true;then
     # 使用for循环遍历数组
     for name in "${file_name[@]}"
     do
-        copyfile=`find "$usb_path" -maxdepth 4 -name "$name.ipsw"`
+        copyfile=`find "$usb_path" -maxdepth 5 -name "$name.ipsw"`
         if [[ -f $copyfile ]];then
             echo "copy $name.ipsw to IPSW/"
             sleep 10

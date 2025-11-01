@@ -2,6 +2,8 @@ import bakebit_128_64_oled as oled
 from PIL import Image, ImageFont, ImageDraw
 import os
 from random import randint
+import signal
+import subprocess
 
 width = 128
 height = 64
@@ -21,6 +23,19 @@ def draw_text(draw, text, x, y,font):
 oled.init()
 oled.setNormalDisplay()
 oled.setHorizontalMode()
+
+def navigate_options(signum, stack):
+    global current_option_index,startTime
+    if signum == signal.SIGUSR1:  # Bouton 1: navigation vers le haut
+        print("SIGUSR1")
+    elif signum == signal.SIGUSR2:  # Bouton 2: navigation vers le bas
+        print("SIGUSR3")
+    elif signum == signal.SIGALRM:  # Bouton 2: navigation vers le bas
+        print("SIGUSR3")
+    command = f"sudo python3 {bash_path}menu.py"
+    subprocess.Popen(command, shell=True, start_new_session=True ,executable='bash')
+    os.killpg(0, signal.SIGTERM)  # Tue tous les processus dans le groupe actuel
+
 
 def bb(text,name):
     x_tab=[]
@@ -47,10 +62,16 @@ def bb(text,name):
         if x<(width - text_width) / 2:
             x+=2
         oled.drawImage(image)
+        signal.signal(signal.SIGUSR1, navigate_options)
+        signal.signal(signal.SIGUSR2, navigate_options)
+        signal.signal(signal.SIGALRM, navigate_options)
 
 if __name__ == "__main__":
+    signal.signal(signal.SIGUSR1, navigate_options)
+    signal.signal(signal.SIGUSR2, navigate_options)
+    signal.signal(signal.SIGALRM, navigate_options)
     oled.clearDisplay()
     bb(text,name)
-    print(f'run python3 {bash_path}menu.py')
-    os.system(f'python3 {bash_path}menu.py')
-    exit(0)
+    #print(f'run python3 {bash_path}menu.py')
+    command = f"sudo python3 {bash_path}menu.py"
+    subprocess.Popen(command, shell=True, start_new_session=True ,executable='bash')
