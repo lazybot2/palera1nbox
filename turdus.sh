@@ -129,17 +129,38 @@ if true;then
     file_name=("6s" "6sp" "5se" "ipad97" "ipad5" "i7" "i7p" "ipod7" "ipad7" "ipadp129-2" "ipadp10")
     usb_path="/media/"
     ipsw_path="/root/palera1nbox/IPSW/"
+    out=""
+    for buck_path in $(find "$usb_path" -type d -maxdepth 2 -name "lazybot_block");do
+        if [[ -d $buck_path ]];then
+            echo "copy block files to lazybot_down dir"
+            sleep 3
+            rsync -uaP -append-verify --partial "./JB" "$buck_path"
+            rsync -uaP -append-verify --partial "./block" "$buck_path"
+            rsync -uaP -append-verify --partial "./image4" "$buck_path"
+            echo "copy block files to lazybot_down dir Ok"
+            sleep 5
+            out="YES"
+        fi
+    done
     # 使用for循环遍历数组
     for name in "${file_name[@]}"
     do
-        copyfile=`find "$usb_path" -maxdepth 5 -name "$name.ipsw"`
-        if [[ -f $copyfile ]];then
-            echo "copy $name.ipsw to IPSW/"
-            sleep 10
-            rsync -avP "$copyfile" "$ipsw_path"
-            sleep 10
-        fi
+        for file in $(find "$usb_path" -maxdepth 5 -name "$name.ipsw");do
+            if [[ -f $file ]];then
+                echo "copy $name.ipsw to IPSW/"
+                sleep 10
+                rsync -avP -append-verify --partial "$file" "$ipsw_path"
+                sleep 10
+                out="YES"
+                break
+            fi
+        done
     done
+    if [[ "$out" = "YES" ]];then
+        echo "Please remove USB drive"
+        sleep 6
+        exit 2
+    fi
 fi
 echo "Lazy Bot Auto turdus" 
 echo "Tethered Downgrade Guide"
@@ -174,7 +195,7 @@ while true;do
                     find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
                     find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
                     find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    exit
+                    exit 0
                 elif [[ $Mode -eq 1 ]];then
                     echo " safe-mode JB"
                     sleep 3
@@ -195,10 +216,10 @@ while true;do
                             sleep 5
                             echo "All Done"
                             sleep 5
-                            exit
+                            exit 0
                         fi
                     done
-                    exit
+                    exit 0
                 elif [ $PTE ];then
                     echo "Booting the device"
                     while true;
@@ -209,7 +230,7 @@ while true;do
                             cp -f $PTE ./JB
                             echo "Booting device Ok"
                             sleep 10
-                            exit
+                            exit 0
                         fi
                     done
                 elif [[ -f $CURRENT ]] && [[ -f $SEP ]];then
@@ -251,7 +272,7 @@ while true;do
                                 echo "fIles: $ISPW"
                                 echo "No Find"
                                 sleep 10
-                                exit
+                                exit 0
                             fi
                         elif [[ $tmp -eq 1 ]];then
                             while true;
@@ -286,7 +307,7 @@ while true;do
                             echo "fIles: $ISPW"
                             echo "No Find"
                             sleep 10
-                            exit
+                            exit 0
                         fi
                     fi
                 else
@@ -308,7 +329,7 @@ while true;do
                         echo "fIles: $ISPW"
                         echo "No Find"
                         sleep 10
-                        exit
+                        exit 0
                     fi
                 fi
             elif [[ "$AMODE" = "A10" ]];then
@@ -330,7 +351,7 @@ while true;do
                     find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
                     find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
                     find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    exit
+                    exit 0
                 elif [[ $Mode -eq 1 ]];then
                     echo "safe-mode Jailbroken"
                     sleep 3
@@ -351,10 +372,10 @@ while true;do
                             sleep 5
                             echo "All Done"
                             sleep 5
-                            exit
+                            exit 0
                         fi
                     done
-                    exit
+                    exit 0
                 elif [[ -f $BOOTIMG ]] && [[ -f $SEPI ]] && [[ -f $SEPP ]];then
                     echo "Booting the device"
                     sleep 3
@@ -368,10 +389,10 @@ while true;do
                             cp -f $SEPP ./JB
                             echo "Booting device Ok"
                             sleep 10
-                            exit
+                            exit 0
                         fi
                     done
-                    exit
+                    exit 0
                 else
 
                     if [ -f "$ISPW" ] ;then
@@ -392,7 +413,7 @@ while true;do
                         echo "fIles: $ISPW"
                         echo "No Find"
                         sleep 10
-                        exit
+                        exit 0
                     fi
                 fi
             else
@@ -400,7 +421,7 @@ while true;do
                 echo "ECID:$ID"
                 echo "$i_CPID"
                 sleep 15
-                exit
+                exit 0
             fi
         else
             if [ $tip_con -eq 0 ];then
@@ -414,7 +435,7 @@ while true;do
             fi
         fi
         ID=0
-        sleep 5
+        sleep 0.5
     done
     ID=0
     echo "complete..."

@@ -25,9 +25,9 @@ image = Image.new('1', (width, height))
 draw = ImageDraw.Draw(image)
 # Définition des options avec leurs images et commandes associées
 options = [
-    {"image": f"{bash_path}menu_palera1n.png", "command": f"sudo python3 {bash_path}palera1n.py"},
-    {"image": f"{bash_path}menu_checkra1n.png", "command": f"sudo python3 {bash_path}checkra1n.py"},
     {"image": f"{bash_path}menu_turdus.png", "command": f"sudo python3 {bash_path}turdus.py"},
+    {"image": f"{bash_path}menu_checkra1n.png", "command": f"sudo python3 {bash_path}checkra1n.py"},
+    {"image": f"{bash_path}menu_palera1n.png", "command": f"sudo python3 {bash_path}palera1n.py"},
     {"image": f"{bash_path}menu_reboot.png", "command": "sudo shutdown -r now"}
 ]
 
