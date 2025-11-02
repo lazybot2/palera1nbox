@@ -34,7 +34,7 @@ cursor_position = 0
 options = {'Safe Mode': False, 'Revert': False}
 arg_map = {'Safe Mode': '--safe-mode', 'Revert': '--force-revert'}
 background_processes = []
-
+manage_close = 0
 # Mise à jour des options de checklist
 def update_checklist_options():
     menu_options['options'] = [f"{'[*]' if options[key] else '[ ]'} {key}" for key in options.keys()] + ["Back"]
@@ -68,12 +68,7 @@ def run_checkra1n():
         background_processes.append(process)
         output_lines = []
         for line in process.stdout:
-            if 'Checkra1n' in line:
-                output_lines.append(line.strip("# "))
-            elif '[' in line:
-                output_lines.append(line.strip("[*]"))
-            else:
-                output_lines.append(line)
+            output_lines.append(line)
             display_message_scroll(output_lines)  # Met à jour l'affichage avec scroll
             #print(line.strip())
             if "All Done" in line:
@@ -89,24 +84,19 @@ def kill_checkra1n():
         for pid in pids:
             p = psutil.Process(pid)
             process_name=p.name()
+            #print(f"PID: {pid}, 名称: {p.name()}")
             if 'turdus.sh' == process_name:
                 os.kill(pid, signal.SIGKILL)
-    except Exception as e:
-        display_message(f"Erreur: {e}")
-        
-def kill_turdus():
-    try:
-        pids = psutil.pids()
-        for pid in pids:
-            p = psutil.Process(pid)
-            process_name=p.name()
-            if 'turdus_merula' == process_name:
+            elif 'turdus_merula' == process_name:
                 os.kill(pid, signal.SIGKILL)
             elif 'turdusra1n' == process_name:
                 os.kill(pid, signal.SIGKILL)
+            elif 'rsync' == process_name:
+                os.kill(pid, signal.SIGKILL)
     except Exception as e:
-        display_message(f"Erreur: {e}")
-# Afficher un message sur l'OLED
+        display_message(f"E: {e}")
+        #print(f"E: {e}")
+        
 def display_message(message):
     try:
         draw.rectangle((0, 0, width, height), outline=0, fill=0)
@@ -120,7 +110,7 @@ def display_message_scroll(lines):
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
     start_line = max(len(lines) -6, 0)  # Affiche les 8 dernières lignes
     for i, line in enumerate(lines[start_line:start_line +6]):
-        draw.text((0, i * 10),  re.sub(r'.*?]','',re.sub(r'.*?>','',re.sub(r'\033\[[0-9;]+m', '', line))), font=font_small, fill=255)
+        draw.text((0, i * 10),  re.sub(r'.*?]','',re.sub(r'.*?>.','',re.sub(r'\033\[[0-9;]+m', '', line))), font=font_small, fill=255)
     oled.drawImage(image)
 
 def kill_background_processes():
@@ -133,37 +123,47 @@ def kill_background_processes():
 
 # Gestion des signaux pour les boutons
 def receive_signal(signum, stack):
-    global current_menu, cursor_position
+    global current_menu, cursor_position, manage_close
     try:
         if signum == signal.SIGUSR1:  # Bouton 1
             cursor_position = (cursor_position - 1) % len(menu_options[current_menu])
+            display_menu_with_cursor()
         elif signum == signal.SIGUSR2:  # Bouton 2
             cursor_position = (cursor_position + 1) % len(menu_options[current_menu])
+            display_menu_with_cursor()
         elif signum == signal.SIGALRM:  # Bouton 3
             manage_selection()
-        display_menu_with_cursor()
+            if manage_close == 0:
+                display_menu_with_cursor()
     except Exception as e:
         print(f"Erreur de signal: {e}")
 
 # Gestion de la sélection dans le menu
 def manage_selection():
-    global current_menu, cursor_position
+    global current_menu, cursor_position, manage_close
     if current_menu == 'main':
         if cursor_position == 0:
             current_menu = 'options'
             cursor_position = 0
+            manage_close=0
         elif cursor_position == 1:
-            kill_checkra1n()
-            kill_background_processes()
-            time.sleep(0.2)
-            oled.clearDisplay()
-            run_checkra1n()
+            if manage_close == 0:
+                manage_close = 1
+                kill_background_processes()
+                time.sleep(0.1)
+                kill_checkra1n()
+                time.sleep(0.1)
+                oled.clearDisplay()
+                run_checkra1n()
+                manage_close = 0
         elif cursor_position == 2:
-            kill_checkra1n()  # Modification ici
-            kill_turdus()
             kill_background_processes()
+            time.sleep(0.1)
+            kill_checkra1n()  # Modification ici
+            manage_close=0
         elif cursor_position == 3:
             exit_program()
+            manage_close=0
     elif current_menu == 'options':
         if cursor_position == len(options):
             current_menu = 'main'
@@ -175,9 +175,9 @@ def manage_selection():
 
 # Fonction pour quitter le programme
 def exit_program():
-    kill_checkra1n()
-    kill_turdus()
     kill_background_processes()
+    time.sleep(0.1)
+    kill_checkra1n()
     subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
     exit(0)
 

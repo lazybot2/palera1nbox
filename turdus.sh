@@ -43,13 +43,13 @@ if [ ! -d ./IPSW ];then
     mkdir IPSW
 fi
 get_ecid(){
-    div=`lsusb | grep "Apple" `
-    dfu=`lsusb | grep "DFU" `
+    div=`sudo lsusb | grep "Apple";exit 0`
+    #dfu=`lsusb | grep "DFU" `
     if [ ! -z "$div" ]; then
         tip_con=1
-        if [ ! -z "$dfu" ]; then
+        if [[ "$div" =~ "DFU" ]]; then
             #echo 'YES'
-            ECID=`$irecovery -q | grep "ECID"`
+            ECID=`$irecovery -q | grep "ECID";exit 0`
             if [ ! -z "$ECID" ]; then
                 ECID=${ECID#*: }
                 ID=$(($ECID+0))
@@ -130,7 +130,7 @@ if true;then
     usb_path="/media/"
     ipsw_path="/root/palera1nbox/IPSW/"
     out=""
-    for buck_path in $(find "$usb_path" -type d -maxdepth 2 -name "lazybot_block");do
+    for buck_path in $(find "$usb_path" -maxdepth 2 -type d -name "lazybot_block");do
         if [[ -d $buck_path ]];then
             echo "copy block files to lazybot_down dir"
             sleep 3
