@@ -66,6 +66,9 @@ if [ ! -f /usr/local/bin/oled-start ]; then
 cat >/usr/local/bin/oled-start <<EOL
 #!/bin/sh
 EOL
+    if [ $(uname -m) = 'aarch64' ]; then
+        echo "rm -rf /media/*"  >> /usr/local/bin/oled-start
+    fi
     echo "if [ \`i2cdetect -l | grep i2c | awk '{print \$1}'\` ]; then" >> /usr/local/bin/oled-start
     echo "  cd $PWD/" >> /usr/local/bin/oled-start
     echo "  ./NanoHatOLED" >> /usr/local/bin/oled-start

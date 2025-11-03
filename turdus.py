@@ -27,12 +27,12 @@ else:
 # Options de menu et état
 menu_options = {
     'main': ['Options', 'Run turdus', 'Stop turdus', 'Exit'],
-    'options': ['Safe Mode', 'Revert', 'Back']
+    'options': ['Safe Mode', 'Revert', 'SHSH', 'Back']
 }
 current_menu = 'main'
 cursor_position = 0
-options = {'Safe Mode': False, 'Revert': False}
-arg_map = {'Safe Mode': '--safe-mode', 'Revert': '--force-revert'}
+options = {'Safe Mode': False, 'Revert': False, 'SHSH': False}
+arg_map = {'Safe Mode': '--safe-mode', 'Revert': '--force-revert', 'SHSH': '--shsh2'}
 background_processes = []
 manage_close = 0
 # Mise à jour des options de checklist
@@ -70,7 +70,7 @@ def run_checkra1n():
         for line in process.stdout:
             output_lines.append(line)
             display_message_scroll(output_lines)  # Met à jour l'affichage avec scroll
-            #print(line.strip())
+            print(line.strip())
             if "All Done" in line:
                 time.sleep(3)
                 exit_program()

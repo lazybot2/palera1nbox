@@ -4,6 +4,7 @@ turdus_merula="sudo ./turdus_merula"
 checkra1n="sudo ./checkra1n"
 irecovery="sudo irecovery"
 Mode=""
+SHSH=""
 ID=0
 ISPW=""
 CURRENT=""
@@ -25,10 +26,14 @@ SEPP=""
 JB_BOOTIMG=""
 JB_SEPI=""
 JB_SEPP=""
+
 if [[ "$*" =~ "--safe-mode" ]];then
     Mode=1
 elif  [[ "$*" =~ "--force-revert" ]];then
     Mode=2
+fi
+if [[ "$*" =~ "--shsh2" ]];then
+    SHSH="SHSH"
 fi
 if [ ! -d ./JB ];then
     mkdir JB
@@ -124,8 +129,7 @@ get_ecid(){
         tip_dfu=0
     fi
 }
-
-if true;then
+if [ -z "$SHSH" ];then
     file_name=("6s" "6sp" "5se" "ipad97" "ipad5" "i7" "i7p" "ipod7" "ipad7" "ipadp129-2" "ipadp10")
     usb_path="/media/"
     ipsw_path="/root/palera1nbox/IPSW/"
@@ -148,7 +152,7 @@ if true;then
         for file in $(find "$usb_path" -maxdepth 5 -name "$name.ipsw");do
             if [[ -f $file ]];then
                 echo "copy $name.ipsw to IPSW/"
-                sleep 10
+                sleep 3
                 rsync -avP -append-verify --partial "$file" "$ipsw_path"
                 sleep 10
                 out="YES"
@@ -163,7 +167,7 @@ if true;then
     fi
 fi
 echo "Lazy Bot Auto turdus" 
-echo "Tethered Downgrade Guide"
+echo "Downgrade Guide"
 echo "For A9(X) A10(X)"
 sleep 3
 while true;do
@@ -175,106 +179,231 @@ while true;do
         tmp=5
         get_ecid
         if [ $ID -gt 0 ] ;then
-            #echo "-----开始越狱-----" 
-            if [[ "$AMODE" = "A9" ]];then
+            if [[ "$SHSH" = "SHSH" ]];then
                 echo "$iphoe_chk:$ID"
                 sleep 5
-                CHK=`find ./JB -name "$ID*current-pteblock2.bin"`
-                PTE=`find ./block -name "$ID*current-pteblock2.bin"`
-                SEP=`find ./image4 -name "$ID*signed-SEP.img4"`
-                IM4P=`find ./image4 -name "$ID*-SEP.im4p"`
-                CURRENT=`find ./block -name "$ID*current-shcblock2.bin"`
-                RESTORE=`find ./block -name "$ID*restore-shcblock2.bin"`
-                if [[ $Mode -eq 2 ]];then
-                    echo "Clear All file $IDs"
-                    for i in {10..1}
-                    do
-                        echo "$i"
-                        sleep 1
-                    done
-                    find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    exit 0
-                elif [[ $Mode -eq 1 ]];then
-                    echo " safe-mode JB"
-                    sleep 3
-                fi
-                if [ $CHK ];then
-                    echo "Jailbroken the device"
-                    sleep 3
-                    while true;
-                    do  
-                        if [[ $Mode -eq 1 ]];then
-                            $turdusra1n -srTP $CHK | tee ./run.log
-                        else
-                            $turdusra1n -rTP $CHK | tee ./run.log
-                        fi
-                        sleep 1
-                        if grep -q "Finally" ./run.log; then
-                            echo "Jailbroken device Ok"
-                            sleep 5
+                SHSH_PATH=""
+                SHSH_SHSH=""
+                SHSH_IPSW=""
+                SHSH_SHC=""
+                generator=""
+                for buck_path in $(find "/media/" -maxdepth 2 -type d -name "$ID");do
+                    if [[ -d $buck_path ]];then
+                        SHSH_PATH="$buck_path"
+                        echo "path $SHSH_PATH"
+                        break
+                    fi
+                done
+                if [[ -z "$SHSH_PATH" ]];then
+                    echo "SHSH_PATH is ERR"
+                    for buck_path in $(find "/media/" -type d -name "sd*");do
+                        if [[ -d $buck_path ]];then
+                            echo "create $ID folder"
+                            sudo mkdir "$buck_path/$ID"
+                            echo "this device $iphoe_chk" > "$buck_path/$ID/$ID.txt"
+                            echo "create $ID folder" >> "$buck_path/$ID/$ID.txt"
+                            echo "Please insert the *.shsh2 file and the corresponding *.ipsw file" >> "$buck_path/$ID/$ID.txt"
+                            sleep 3
+                            echo "Please remove USB drive"
+                            sleep 3
                             echo "All Done"
                             sleep 5
                             exit 0
                         fi
                     done
                     exit 0
-                elif [ $PTE ];then
-                    echo "Booting the device"
-                    while true;
-                    do
-                        $turdusra1n -TP $PTE | tee ./run.log
+                else
+                    echo "chk file"
+                    for file in $(find "$SHSH_PATH" -name "*.shsh2");do
+                        if [[ -f "$file" ]];then
+                            SHSH_SHSH="$file"
+                        fi
+                    done
+                    for file in $(find "$SHSH_PATH" -name "*.ipsw");do
+                        if [[ -f "$file" ]];then
+                            SHSH_IPSW="$file"
+                        fi
+                    done
+                fi
+                if [[ ! -f "$SHSH_SHSH" ]];then
+                    echo "No find *.shsh2 file"
+                    sleep 10
+                    exit 0
+                else
+                    txt=`cat $SHSH_SHSH | grep -A 1 "generator"`
+                    if [[ $txt ]];then
+                        txt=${txt##*<string>}
+                        txt=${txt%</string>*}
+                    fi
+                    if [[ $txt ]];then
+                        generator="$txt"
+                    fi
+                    if [[ $generator ]];then
+                        echo "gen:$generator"
+                    else
+                        echo "No find generator"
+                        sleep 10
+                        exit 0
+                    fi
+                fi
+                if [[ ! -f "$SHSH_IPSW" ]];then
+                    echo "No find *.ipsw file"
+                    sleep 10
+                    exit 0
+                else
+                    echo "$SHSH_IPSW"
+                fi
+                ###################
+                if [[ "$AMODE" = "A9" ]];then
+                    ###############
+                    SHSH_SHC=`find ./block -name "$ID*restore-shcblock2.bin"`
+                    if [ $SHSH_SHC ];then
+                        for i in {10..1}
+                        do
+                            echo "Restoring the device $i S"
+                            sleep 1
+                        done
+                        $turdusra1n -Db $generator
+                        sleep 5
+                        $turdus_merula -y -w --load-shsh "$SHSH_SHSH" --load-shcblock "$SHSH_SHC" "$SHSH_IPSW"  | tee ./run.log
                         sleep 1
-                        if grep -q "Sent bootux" ./run.log; then
-                            cp -f $PTE ./JB
-                            echo "Booting device Ok"
+                        if grep -q "DONE" ./run.log; then
+                            echo "Restoring Ok"
+                            sleep 10
+                            find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                            find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                            find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                            echo "Please remove USB drive"
+                            sleep 5
+                            echo "All Done"
                             sleep 10
                             exit 0
                         fi
-                    done
-                elif [[ -f $CURRENT ]] && [[ -f $SEP ]];then
-                    while true;
-                    do
-                        $turdusra1n -g -i $SEP -C $CURRENT | tee ./run.log
-                        sleep 1
-                        if grep -q ".bin saved to" ./run.log; then
-                            echo -e "pteblock Ok"
-                            sleep 15
-                            break
-                        fi
-                    done
-                    break
-                elif [ $RESTORE ];then
-                    if [ $SEP ];then
-                        if [ $update -eq 1 ];then
-                            tmp=1
-                        else
-                            tmp=2
-                        fi
-                        if [[ $tmp -eq 2 ]];then
-                            echo "Restoring the device"
-                            sleep 3
-                            if [ -f "$ISPW" ] ;then
-                                $turdusra1n -D
-                                sleep 5
-                                $turdus_merula -y -o --load-shcblock $RESTORE $ISPW  | tee ./run.log
-                                sleep 1
-                                if grep -q "DONE" ./run.log; then
-                                    echo "Restoring Ok"
-                                    sleep 15
-                                    update=1
-                                    break
-                                fi
-                                sleep 3
+                        sleep 3
+                        echo "Restoring Err"
+                        sleep 10
+                        exit 0                     
+                    else
+                        $turdusra1n -D
+                        sleep 3
+                        while true;
+                        do
+                            $turdus_merula -y --get-shcblock "$SHSH_IPSW" | tee ./run.log
+                            sleep 1
+                            if grep -q ".bin saved to" ./run.log; then
+                                echo -e "shcblock Ok"
+                                sleep 15
                                 break
+                            fi
+                        done
+                        break
+                    fi
+                    #########
+                elif [[ "$AMODE" = "A10" ]];then
+                    for i in {10..1}
+                    do
+                        echo "Restoring the device $i S"
+                        sleep 1
+                    done
+                    $turdusra1n -Db $generator
+                    sleep 5
+                    $turdus_merula -y -w --load-shsh "$SHSH_SHSH" "$SHSH_IPSW" | tee ./run.log
+                    sleep 1
+                    if grep -q "DONE" ./run.log; then
+                        echo "Restoring Ok"
+                        sleep 10
+                        find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        echo "Please remove USB drive"
+                        sleep 5
+                        echo "All Done"
+                        sleep 10
+                        exit 0
+                    fi
+                    sleep 3
+                    echo "Restoring Err"
+                    sleep 10
+                    exit 0 
+                else
+                    echo "not supported the device"
+                    echo "ECID:$ID"
+                    echo "$i_CPID"
+                    sleep 15
+                    exit 0
+                fi
+            else    
+                if [[ "$AMODE" = "A9" ]];then
+                    echo "$iphoe_chk:$ID"
+                    sleep 5
+                    CHK=`find ./JB -name "$ID*current-pteblock2.bin"`
+                    PTE=`find ./block -name "$ID*current-pteblock2.bin"`
+                    SEP=`find ./image4 -name "$ID*signed-SEP.img4"`
+                    IM4P=`find ./image4 -name "$ID*-SEP.im4p"`
+                    CURRENT=`find ./block -name "$ID*current-shcblock2.bin"`
+                    RESTORE=`find ./block -name "$ID*restore-shcblock2.bin"`
+                    if [[ $Mode -eq 2 ]];then
+                        echo "Clear All file $IDs"
+                        for i in {10..1}
+                        do
+                            echo "Clear file $i S"
+                            sleep 1
+                        done
+                        find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        exit 0
+                    elif [[ $Mode -eq 1 ]];then
+                        echo " safe-mode JB"
+                        sleep 3
+                    fi
+                    if [ $CHK ];then
+                        echo "Jailbroken the device"
+                        sleep 3
+                        while true;
+                        do  
+                            if [[ $Mode -eq 1 ]];then
+                                $turdusra1n -srTP $CHK | tee ./run.log
                             else
-                                echo "fIles: $ISPW"
-                                echo "No Find"
+                                $turdusra1n -rTP $CHK | tee ./run.log
+                            fi
+                            sleep 1
+                            if grep -q "Finally" ./run.log; then
+                                echo "Jailbroken device Ok"
+                                sleep 5
+                                echo "All Done"
+                                sleep 5
+                                exit 0
+                            fi
+                        done
+                        exit 0
+                    elif [ $PTE ];then
+                        echo "Booting the device"
+                        while true;
+                        do
+                            $turdusra1n -TP $PTE | tee ./run.log
+                            sleep 1
+                            if grep -q "Sent bootux" ./run.log; then
+                                cp -f $PTE ./JB
+                                echo "Booting device Ok"
                                 sleep 10
                                 exit 0
                             fi
-                        elif [[ $tmp -eq 1 ]];then
+                        done
+                    elif [[ -f $CURRENT ]] && [[ -f $SEP ]];then
+                        while true;
+                        do
+                            $turdusra1n -g -i $SEP -C $CURRENT | tee ./run.log
+                            sleep 1
+                            if grep -q ".bin saved to" ./run.log; then
+                                echo -e "pteblock Ok"
+                                sleep 15
+                                break
+                            fi
+                        done
+                        break
+                    elif [[ -f $RESTORE ]];then
+                        if [[ -f $SEP ]];then
                             while true;
                             do
                                 $turdusra1n -g | tee ./run.log
@@ -286,22 +415,49 @@ while true;do
                                 fi
                             done
                             break
+                        else
+                            echo "Restoring the device"
+                            sleep 3
+                            if [ -f "$ISPW" ] ;then
+                                $turdusra1n -D
+                                sleep 5
+                                $turdus_merula -y -o --load-shcblock $RESTORE $ISPW  | tee ./run.log
+                                sleep 5
+                                if grep -q "DONE" ./run.log; then
+                                    echo "Restoring Ok"
+                                    sleep 10
+                                    break
+                                else
+                                    echo "Restoring Err"
+                                    find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                                    find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                                    find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                                    sleep 20
+                                    exit 2
+                                fi
+                                sleep 3
+                                break
+                            else
+                                echo "fIles: $ISPW"
+                                echo "No Find"
+                                sleep 10
+                                exit 0
+                            fi
                         fi
                     else
-                        echo "Restoring the device"
-                        sleep 3
-                        if [ -f "$ISPW" ] ;then
+                        if [[ -f "$ISPW" ]] ;then
                             $turdusra1n -D
-                            sleep 5
-                            $turdus_merula -y -o --load-shcblock $RESTORE $ISPW  | tee ./run.log
-                            sleep 1
-                            if grep -q "DONE" ./run.log; then
-                               echo "Restoring Ok"
-                                sleep 15
-                                update=1
-                                break
-                            fi
                             sleep 3
+                            while true;
+                            do
+                                $turdus_merula -y --get-shcblock $ISPW | tee ./run.log
+                                sleep 1
+                                if grep -q ".bin saved to" ./run.log; then
+                                    echo -e "shcblock Ok"
+                                    sleep 15
+                                    break
+                                fi
+                            done
                             break
                         else
                             echo "fIles: $ISPW"
@@ -310,118 +466,101 @@ while true;do
                             exit 0
                         fi
                     fi
-                else
-                    if [[ -f "$ISPW" ]] ;then
-                        $turdusra1n -D
+                elif [[ "$AMODE" = "A10" ]];then
+                    echo "$iphoe_chk:$ID"
+                    sleep 5
+                    JB_BOOTIMG=`find ./JB -name "$ID*-iBoot.img4"`
+                    JB_SEPI=`find ./JB -name "$ID*-signed-SEP.img4"`
+                    JB_SEPP=`find ./JB -name "$ID*-SEP.im4p"`
+                    BOOTIMG=`find ./image4 -name "$ID*-iBoot.img4"`
+                    SEPI=`find ./image4 -name "$ID*-signed-SEP.img4"`
+                    SEPP=`find ./image4 -name "$ID*-SEP.im4p"`
+                    if [[ $Mode -eq 2 ]];then
+                        echo "Clear All file $ID s"
+                        for i in {10..1}
+                        do
+                            echo "$i"
+                            sleep 1
+                        done
+                        find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                        exit 0
+                    elif [[ $Mode -eq 1 ]];then
+                        echo "safe-mode Jailbroken"
+                        sleep 3
+                    fi
+                    if [[ -f $JB_BOOTIMG ]] && [[ -f $JB_SEPI ]] && [[ -f $JB_SEPP ]];then
+                        echo "Jailbroken the device"
+                        sleep 3
+                        while true;
+                        do  
+                            if [[ $Mode -eq 1 ]];then
+                                $turdusra1n -srt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                            else
+                                $turdusra1n -rt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                            fi
+                            sleep 1
+                            if grep -q "Finally" ./run.log; then
+                                echo "Jailbroken device Ok"
+                                sleep 5
+                                echo "All Done"
+                                sleep 5
+                                exit 0
+                            fi
+                        done
+                        exit 0
+                    elif [[ -f $BOOTIMG ]] && [[ -f $SEPI ]] && [[ -f $SEPP ]];then
+                        echo "Booting the device"
                         sleep 3
                         while true;
                         do
-                            $turdus_merula -y --get-shcblock $ISPW | tee ./run.log
+                            $turdusra1n -t $BOOTIMG -i $SEPI -p $SEPP | tee ./run.log
                             sleep 1
-                            if grep -q ".bin saved to" ./run.log; then
-                                echo -e "shcblock Ok"
-                                sleep 15
-                                break
+                            if grep -q "Sent bootux" ./run.log; then
+                                cp -f $BOOTIMG ./JB
+                                cp -f $SEPI ./JB
+                                cp -f $SEPP ./JB
+                                echo "Booting device Ok"
+                                sleep 10
+                                exit 0
                             fi
                         done
-                        break
-                    else
-                        echo "fIles: $ISPW"
-                        echo "No Find"
-                        sleep 10
                         exit 0
-                    fi
-                fi
-            elif [[ "$AMODE" = "A10" ]];then
-                echo "$iphoe_chk:$ID"
-                sleep 5
-                JB_BOOTIMG=`find ./JB -name "$ID*-iBoot.img4"`
-                JB_SEPI=`find ./JB -name "$ID*-signed-SEP.img4"`
-                JB_SEPP=`find ./JB -name "$ID*-SEP.im4p"`
-                BOOTIMG=`find ./image4 -name "$ID*-iBoot.img4"`
-                SEPI=`find ./image4 -name "$ID*-signed-SEP.img4"`
-                SEPP=`find ./image4 -name "$ID*-SEP.im4p"`
-                if [[ $Mode -eq 2 ]];then
-                    echo "Clear All file $IDs"
-                    for i in {10..1}
-                    do
-                        echo "$i"
-                        sleep 1
-                    done
-                    find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
-                    exit 0
-                elif [[ $Mode -eq 1 ]];then
-                    echo "safe-mode Jailbroken"
-                    sleep 3
-                fi
-                if [[ -f $JB_BOOTIMG ]] && [[ -f $JB_SEPI ]] && [[ -f $JB_SEPP ]];then
-                    echo "Jailbroken the device"
-                    sleep 3
-                    while true;
-                    do  
-                        if [[ $Mode -eq 1 ]];then
-                            $turdusra1n -srt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                    else
+                        if [ -f "$ISPW" ] ;then
+                            echo "Restoring the device"
+                            sleep 3
+                            $turdusra1n -D
+                            sleep 3
+                            $turdus_merula -y -o $ISPW | tee ./run.log
+                            sleep 5
+                            if grep -q "DONE" ./run.log; then
+                                echo "Restoring Ok"
+                                sleep 10
+                                break
+                            else
+                                echo "Restoring Err"
+                                find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                                find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                                find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
+                                sleep 20
+                                exit 2
+                            fi
                         else
-                            $turdusra1n -rt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
-                        fi
-                        sleep 1
-                        if grep -q "Finally" ./run.log; then
-                            echo "Jailbroken device Ok"
-                            sleep 5
-                            echo "All Done"
-                            sleep 5
-                            exit 0
-                        fi
-                    done
-                    exit 0
-                elif [[ -f $BOOTIMG ]] && [[ -f $SEPI ]] && [[ -f $SEPP ]];then
-                    echo "Booting the device"
-                    sleep 3
-                    while true;
-                    do
-                        $turdusra1n -t $BOOTIMG -i $SEPI -p $SEPP | tee ./run.log
-                        sleep 1
-                        if grep -q "Sent bootux" ./run.log; then
-                            cp -f $BOOTIMG ./JB
-                            cp -f $SEPI ./JB
-                            cp -f $SEPP ./JB
-                            echo "Booting device Ok"
+                            echo "fIles: $ISPW"
+                            echo "No Find"
                             sleep 10
                             exit 0
                         fi
-                    done
-                    exit 0
-                else
-
-                    if [ -f "$ISPW" ] ;then
-                        echo "Restoring the device"
-                        sleep 3
-                        update=0
-                        $turdusra1n -D
-                        sleep 3
-                        $turdus_merula -y -o $ISPW | tee ./run.log
-                        sleep 1
-                        if grep -q "DONE" ./run.log; then
-                            echo "Restoring Ok"
-                            sleep 15
-                            update=1
-                            break
-                        fi
-                    else
-                        echo "fIles: $ISPW"
-                        echo "No Find"
-                        sleep 10
-                        exit 0
                     fi
+                else
+                    echo "not supported the device"
+                    echo "ECID:$ID"
+                    echo "$i_CPID"
+                    sleep 15
+                    exit 0
                 fi
-            else
-                echo "not supported the device"
-                echo "ECID:$ID"
-                echo "$i_CPID"
-                sleep 15
-                exit 0
             fi
         else
             if [ $tip_con -eq 0 ];then
