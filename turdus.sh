@@ -31,6 +31,10 @@ if [[ "$*" =~ "--safe-mode" ]];then
     Mode=1
 elif  [[ "$*" =~ "--force-revert" ]];then
     Mode=2
+elif [[ "$*" =~ "--sileo" ]];then
+    Mode=3
+elif  [[ "$*" =~ "--normal" ]];then
+    Mode=4
 fi
 if [[ "$*" =~ "--shsh2" ]];then
     SHSH="SHSH"
@@ -353,27 +357,51 @@ while true;do
                         find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
                         find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
                         exit 0
-                    elif [[ $Mode -eq 1 ]];then
-                        echo " safe-mode JB"
-                        sleep 3
                     fi
                     if [ $CHK ];then
-                        echo "Jailbroken the device"
+                        if [[ $Mode -eq 4 ]];then
+                            echo "Booting the device"
+                        else
+                            echo "Jailbroken the device"
+                            if [[ $Mode -eq 1 ]];then
+                                echo "Safe Mode"
+                            fi
+                        fi
                         sleep 3
                         while true;
                         do  
-                            if [[ $Mode -eq 1 ]];then
-                                $turdusra1n -srTP $CHK | tee ./run.log
+                            if [[ $Mode -eq 4 ]];then
+                                $turdusra1n -TP $CHK | tee ./run.log
+                                sleep 1
+                                if grep -q "Sent bootux" ./run.log; then
+                                    echo "Booting device Ok"
+                                    sleep 5
+                                    echo "All Done"
+                                    sleep 5
+                                    exit 0
+                                fi
                             else
-                                $turdusra1n -rTP $CHK | tee ./run.log
-                            fi
-                            sleep 1
-                            if grep -q "Finally" ./run.log; then
-                                echo "Jailbroken device Ok"
-                                sleep 5
-                                echo "All Done"
-                                sleep 5
-                                exit 0
+                                if [[ $Mode -eq 1 ]];then
+                                    $turdusra1n -srTP $CHK | tee ./run.log
+                                else
+                                    $turdusra1n -rTP $CHK | tee ./run.log
+                                fi
+                                sleep 1
+                                if grep -q "Finally" ./run.log; then
+                                    echo "Jailbroken device Ok"
+                                    sleep 5
+                                    if [[ $Mode -eq 3 ]];then
+                                        for i in {30..1}
+                                        do
+                                            echo "Install Silen wait..$i S"
+                                            sleep 1
+                                        done
+                                        expect ./install_Sileo.sh
+                                    fi
+                                    echo "All Done"
+                                    sleep 5
+                                    exit 0
+                                fi
                             fi
                         done
                         exit 0
@@ -486,27 +514,51 @@ while true;do
                         find ./image4/ -name "$ID*" -type f -print -exec rm -rf {} \;
                         find ./block/ -name "$ID*" -type f -print -exec rm -rf {} \;
                         exit 0
-                    elif [[ $Mode -eq 1 ]];then
-                        echo "safe-mode Jailbroken"
-                        sleep 3
                     fi
                     if [[ -f $JB_BOOTIMG ]] && [[ -f $JB_SEPI ]] && [[ -f $JB_SEPP ]];then
-                        echo "Jailbroken the device"
+                        if [[ $Mode -eq 4 ]];then
+                            echo "Booting the device"
+                        else
+                            echo "Jailbroken the device"
+                            if [[ $Mode -eq 1 ]];then
+                                echo "Safe Mode"
+                            fi
+                        fi
                         sleep 3
                         while true;
                         do  
-                            if [[ $Mode -eq 1 ]];then
-                                $turdusra1n -srt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                            if [[ $Mode -eq 4 ]];then
+                                $turdusra1n -t $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                                sleep 1
+                                if grep -q "Sent bootux" ./run.log; then
+                                    echo "Booting device Ok"
+                                    sleep 5
+                                    echo "All Done"
+                                    sleep 5
+                                    exit 0
+                                fi
                             else
-                                $turdusra1n -rt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
-                            fi
-                            sleep 1
-                            if grep -q "Finally" ./run.log; then
-                                echo "Jailbroken device Ok"
-                                sleep 5
-                                echo "All Done"
-                                sleep 5
-                                exit 0
+                                if [[ $Mode -eq 1 ]];then
+                                    $turdusra1n -srt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                                else
+                                    $turdusra1n -rt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                                fi
+                                sleep 1
+                                if grep -q "Finally" ./run.log; then
+                                    echo "Jailbroken device Ok"
+                                    sleep 5
+                                    if [[ $Mode -eq 3 ]];then
+                                        for i in {30..1}
+                                        do
+                                            echo "Install Silen wait..$i S"
+                                            sleep 1
+                                        done
+                                        expect ./install_Sileo.sh
+                                    fi
+                                    echo "All Done"
+                                    sleep 5
+                                    exit 0
+                                fi
                             fi
                         done
                         exit 0

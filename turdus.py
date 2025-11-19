@@ -27,12 +27,12 @@ else:
 # Options de menu et état
 menu_options = {
     'main': ['Options', 'Run turdus', 'Stop turdus', 'Exit'],
-    'options': ['Safe Mode', 'Revert', 'SHSH', 'Back']
+    'options': ['Safe Mode', 'Normal Startup', 'In Sileo', 'SHSH', 'Revert', 'Back']
 }
 current_menu = 'main'
 cursor_position = 0
-options = {'Safe Mode': False, 'Revert': False, 'SHSH': False}
-arg_map = {'Safe Mode': '--safe-mode', 'Revert': '--force-revert', 'SHSH': '--shsh2'}
+options = {'Safe Mode': False, 'Normal Startup': False, 'In Sileo': False, 'SHSH': False, 'Revert': False}
+arg_map = {'Safe Mode': '--safe-mode', 'Normal Startup': '--normal', 'In Sileo': '--sileo', 'SHSH': '--shsh2', 'Revert': '--force-revert'}
 background_processes = []
 manage_close = 0
 # Mise à jour des options de checklist
