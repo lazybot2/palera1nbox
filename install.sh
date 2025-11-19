@@ -96,10 +96,6 @@ sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
 sudo chmod +x ./turdus_merula
 sudo chmod +x ./turdusra1n
-sudo rm -rf ./.git
-sudo rm -rf ./doc
-sudo rm -f ./*.md
-sudo rm -rf ./Source
 if [ $(uname -m) = 'aarch64' ]; then
     if [ ! -d ./IPSW ];then
         mkdir IPSW
