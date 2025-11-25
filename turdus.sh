@@ -134,22 +134,43 @@ get_ecid(){
     fi
 }
 if [ -z "$SHSH" ];then
+    
     file_name=("6s" "6sp" "5se" "ipad97" "ipad5" "i7" "i7p" "ipod7" "ipad7" "ipadp129-2" "ipadp10")
     usb_path="/media/"
     ipsw_path="/root/palera1nbox/IPSW/"
     out=""
-    for buck_path in $(find "$usb_path" -maxdepth 2 -type d -name "lazybot_block");do
+    if [[ "$(find "$usb_path" -mindepth 1 -maxdepth 1 -type d )" ]];then
+        echo "Backup dir name is:"
+        echo "lazybot_back"
+        echo "Upload dir name is:"
+        echo "lazybot_load"
+        sleep 3
+    fi
+    for buck_path in $(find "$usb_path" -maxdepth 2 -type d -name "lazybot_load");do
         if [[ -d $buck_path ]];then
-            echo "copy block files to lazybot_down dir"
+            echo "up load files"
             sleep 3
-            rsync -uaP -append-verify --partial "./JB" "$buck_path"
-            rsync -uaP -append-verify --partial "./block" "$buck_path"
-            rsync -uaP -append-verify --partial "./image4" "$buck_path"
-            echo "copy block files to lazybot_down dir Ok"
+            cp -uv "$buck_path/"*.bin "./JB/"
+            cp -uv "$buck_path/"*.img4 "./JB/"
+            cp -uv "$buck_path/"*.im4p "./JB/"
+            echo "Up load files OK"
             sleep 5
             out="YES"
+            break
         fi
     done
+    for buck_path in $(find "$usb_path" -maxdepth 2 -type d -name "lazybot_back");do
+        if [[ -d $buck_path ]];then
+            echo "backup files to lazybot_back"
+            sleep 3
+            cp -urv "./JB/" "$buck_path"
+            echo "Backup filse OK"
+            sleep 5
+            out="YES"
+            break
+        fi
+    done
+    
     # 使用for循环遍历数组
     for name in "${file_name[@]}"
     do
@@ -165,6 +186,9 @@ if [ -z "$SHSH" ];then
         done
     done
     if [[ "$out" = "YES" ]];then
+        for buck_path in $(find "$usb_path" -mindepth 1 -maxdepth 1 -type d);do
+            sudo umount "$buck_path"
+        done
         echo "Please remove USB drive"
         sleep 6
         exit 2
