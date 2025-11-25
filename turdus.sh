@@ -26,7 +26,7 @@ SEPP=""
 JB_BOOTIMG=""
 JB_SEPI=""
 JB_SEPP=""
-
+Log="./run.log"
 if [[ "$*" =~ "--safe-mode" ]];then
     Mode=1
 elif  [[ "$*" =~ "--force-revert" ]];then
@@ -38,6 +38,9 @@ elif  [[ "$*" =~ "--normal" ]];then
 fi
 if [[ "$*" =~ "--shsh2" ]];then
     SHSH="SHSH"
+fi
+if [ -d /tmp ];then
+    Log="/tmp/turdus_run.log"
 fi
 if [ ! -d ./JB ];then
     mkdir JB
@@ -293,9 +296,9 @@ while true;do
                         done
                         $turdusra1n -Db $generator
                         sleep 5
-                        $turdus_merula -y -w --load-shsh "$SHSH_SHSH" --load-shcblock "$SHSH_SHC" "$SHSH_IPSW"  | tee ./run.log
+                        $turdus_merula -y -w --load-shsh "$SHSH_SHSH" --load-shcblock "$SHSH_SHC" "$SHSH_IPSW"  | tee "$Log"
                         sleep 1
-                        if grep -q "DONE" ./run.log; then
+                        if grep -q "DONE" "$Log"; then
                             echo "Restoring Ok"
                             sleep 10
                             find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
@@ -316,9 +319,9 @@ while true;do
                         sleep 3
                         while true;
                         do
-                            $turdus_merula -y --get-shcblock "$SHSH_IPSW" | tee ./run.log
+                            $turdus_merula -y --get-shcblock "$SHSH_IPSW" | tee "$Log"
                             sleep 1
-                            if grep -q ".bin saved to" ./run.log; then
+                            if grep -q ".bin saved to" "$Log"; then
                                 echo -e "shcblock Ok"
                                 sleep 15
                                 break
@@ -335,9 +338,9 @@ while true;do
                     done
                     $turdusra1n -Db $generator
                     sleep 5
-                    $turdus_merula -y -w --load-shsh "$SHSH_SHSH" "$SHSH_IPSW" | tee ./run.log
+                    $turdus_merula -y -w --load-shsh "$SHSH_SHSH" "$SHSH_IPSW" | tee "$Log"
                     sleep 1
-                    if grep -q "DONE" ./run.log; then
+                    if grep -q "DONE" "$Log"; then
                         echo "Restoring Ok"
                         sleep 10
                         find ./JB/ -name "$ID*" -type f -print -exec rm -rf {} \;
@@ -395,9 +398,9 @@ while true;do
                         while true;
                         do  
                             if [[ $Mode -eq 4 ]];then
-                                $turdusra1n -TP $CHK | tee ./run.log
+                                $turdusra1n -TP $CHK | tee "$Log"
                                 sleep 1
-                                if grep -q "Sent bootux" ./run.log; then
+                                if grep -q "Sent bootux" "$Log"; then
                                     echo "Booting device Ok"
                                     sleep 5
                                     echo "All Done"
@@ -406,12 +409,12 @@ while true;do
                                 fi
                             else
                                 if [[ $Mode -eq 1 ]];then
-                                    $turdusra1n -srTP $CHK | tee ./run.log
+                                    $turdusra1n -srTP $CHK | tee "$Log"
                                 else
-                                    $turdusra1n -rTP $CHK | tee ./run.log
+                                    $turdusra1n -rTP $CHK | tee "$Log"
                                 fi
                                 sleep 1
-                                if grep -q "Finally" ./run.log; then
+                                if grep -q "Finally" "$Log"; then
                                     echo "Jailbroken device Ok"
                                     sleep 5
                                     if [[ $Mode -eq 3 ]];then
@@ -433,9 +436,9 @@ while true;do
                         echo "Booting the device"
                         while true;
                         do
-                            $turdusra1n -TP $PTE | tee ./run.log
+                            $turdusra1n -TP $PTE | tee "$Log"
                             sleep 1
-                            if grep -q "Sent bootux" ./run.log; then
+                            if grep -q "Sent bootux" "$Log"; then
                                 cp -f $PTE ./JB
                                 echo "Booting device Ok"
                                 sleep 10
@@ -445,9 +448,9 @@ while true;do
                     elif [[ -f $CURRENT ]] && [[ -f $SEP ]];then
                         while true;
                         do
-                            $turdusra1n -g -i $SEP -C $CURRENT | tee ./run.log
+                            $turdusra1n -g -i $SEP -C $CURRENT | tee "$Log"
                             sleep 1
-                            if grep -q ".bin saved to" ./run.log; then
+                            if grep -q ".bin saved to" "$Log"; then
                                 echo -e "pteblock Ok"
                                 sleep 15
                                 break
@@ -458,9 +461,9 @@ while true;do
                         if [[ -f $SEP ]];then
                             while true;
                             do
-                                $turdusra1n -g | tee ./run.log
+                                $turdusra1n -g | tee "$Log"
                                 sleep 1
-                                if grep -q ".bin saved to" ./run.log; then
+                                if grep -q ".bin saved to" "$Log"; then
                                     echo -e "current shcblock OK"
                                     sleep 15
                                     break
@@ -473,9 +476,9 @@ while true;do
                             if [ -f "$ISPW" ] ;then
                                 $turdusra1n -D
                                 sleep 5
-                                $turdus_merula -y -o --load-shcblock $RESTORE $ISPW  | tee ./run.log
+                                $turdus_merula -y -o --load-shcblock $RESTORE $ISPW  | tee "$Log"
                                 sleep 5
-                                if grep -q "DONE" ./run.log; then
+                                if grep -q "DONE" "$Log"; then
                                     echo "Restoring Ok"
                                     sleep 10
                                     break
@@ -502,9 +505,9 @@ while true;do
                             sleep 3
                             while true;
                             do
-                                $turdus_merula -y --get-shcblock $ISPW | tee ./run.log
+                                $turdus_merula -y --get-shcblock $ISPW | tee "$Log"
                                 sleep 1
-                                if grep -q ".bin saved to" ./run.log; then
+                                if grep -q ".bin saved to" "$Log"; then
                                     echo -e "shcblock Ok"
                                     sleep 15
                                     break
@@ -552,9 +555,9 @@ while true;do
                         while true;
                         do  
                             if [[ $Mode -eq 4 ]];then
-                                $turdusra1n -t $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                                $turdusra1n -t $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee "$Log"
                                 sleep 1
-                                if grep -q "Sent bootux" ./run.log; then
+                                if grep -q "Sent bootux" "$Log"; then
                                     echo "Booting device Ok"
                                     sleep 5
                                     echo "All Done"
@@ -563,12 +566,12 @@ while true;do
                                 fi
                             else
                                 if [[ $Mode -eq 1 ]];then
-                                    $turdusra1n -srt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                                    $turdusra1n -srt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee "$Log"
                                 else
-                                    $turdusra1n -rt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee ./run.log
+                                    $turdusra1n -rt $JB_BOOTIMG -i $JB_SEPI -p $JB_SEPP | tee "$Log"
                                 fi
                                 sleep 1
-                                if grep -q "Finally" ./run.log; then
+                                if grep -q "Finally" "$Log"; then
                                     echo "Jailbroken device Ok"
                                     sleep 5
                                     if [[ $Mode -eq 3 ]];then
@@ -591,9 +594,9 @@ while true;do
                         sleep 3
                         while true;
                         do
-                            $turdusra1n -t $BOOTIMG -i $SEPI -p $SEPP | tee ./run.log
+                            $turdusra1n -t $BOOTIMG -i $SEPI -p $SEPP | tee "$Log"
                             sleep 1
-                            if grep -q "Sent bootux" ./run.log; then
+                            if grep -q "Sent bootux" "$Log"; then
                                 cp -f $BOOTIMG ./JB
                                 cp -f $SEPI ./JB
                                 cp -f $SEPP ./JB
@@ -609,9 +612,9 @@ while true;do
                             sleep 3
                             $turdusra1n -D
                             sleep 3
-                            $turdus_merula -y -o $ISPW | tee ./run.log
+                            $turdus_merula -y -o $ISPW | tee "$Log"
                             sleep 5
-                            if grep -q "DONE" ./run.log; then
+                            if grep -q "DONE" "$Log"; then
                                 echo "Restoring Ok"
                                 sleep 10
                                 break
