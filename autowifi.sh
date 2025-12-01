@@ -1,5 +1,5 @@
 #!/bin/bash
-SSID="lazy"
+SSID="lazybot"
 PASSWORD="12345678"
 chkwifi=$(nmcli device | grep -o -E "^wlxe.*wifi.*disconnected.*")
 if [[  ! -z "$chkwifi" ]];then
