@@ -29,7 +29,7 @@ esac
 usermod -a lazybot -G root
 sudo apt-get update
 sudo apt-get -y upgrade
-sudo apt-get install -y i2c-tools git wget vim gcc python3 python3-dev python3-pil python3-smbus python3-pip python3-serial 
+sudo apt-get install -y i2c-tools git wget vim gcc python3 python3-dev python3-pil python3-smbus python3-pip python3-serial shellinabox
 pip3 install --upgrade setuptools
 pip3 install sh
 pip3 install wheel
@@ -72,6 +72,10 @@ EOL
     echo "if [ \`i2cdetect -l | grep i2c | awk '{print \$1}'\` ]; then" >> /usr/local/bin/oled-start
     echo "  cd $PWD/" >> /usr/local/bin/oled-start
     echo "  ./NanoHatOLED" >> /usr/local/bin/oled-start
+    echo "  sleep 15" >> /usr/local/bin/oled-start
+    echo "  if [ -f \"$PWD/autowifi.sh\" ];then" >> /usr/local/bin/oled-start
+    echo "    /bin/bash $PWD/autowifi.sh" >> /usr/local/bin/oled-start
+    echo "  fi" >> /usr/local/bin/oled-start
     echo "else" >> /usr/local/bin/oled-start
     echo "  reboot" >> /usr/local/bin/oled-start
     echo "fi" >> /usr/local/bin/oled-start
