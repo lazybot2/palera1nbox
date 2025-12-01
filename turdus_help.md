@@ -14,7 +14,7 @@ NaonPi NEO(2)越狱盒子
 
 > 如需要备份引导存档时：请在u盘根目录建立lazybot_back文件夹，并运行turdus。盒子将自动备份。如需上传引导文件到盒子上，则需要将文件存放到u盘根目录的lazybot_load文件夹里。并运行turdus。
 
->上传ipsw刷机包：在u盘上存放好要上传的ipsw文件。并按以下格式命名："6s.ipsw" "6sp.ipsw" "5se.ipsw" "ipad97.ipsw" "ipad5.ipsw" "i7.ipsw" "i7p.ipsw" "ipod7.ipsw" "ipad7.ipsw" "ipadp129-2.ipsw" "ipadp10.ipsw" 如不知道所需ipsw包命名格式。可直接进入turdus进行降级。盒子将会显示提示。
+> 上传ipsw刷机包：在u盘上存放好要上传的ipsw文件。并按以下格式命名："6s.ipsw" "6sp.ipsw" "5se.ipsw" "ipad97.ipsw" "ipad5.ipsw" "i7.ipsw" "i7p.ipsw" "ipod7.ipsw" "ipad7.ipsw" "ipadp129-2.ipsw" "ipadp10.ipsw" 如不知道所需ipsw包命名格式。可直接进入turdus进行降级。盒子将会显示提示。
 
 * 强制降级
 
