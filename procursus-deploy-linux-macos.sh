@@ -16,7 +16,6 @@ fi
 
 CURRENTDIR=$(pwd)
 ODYSSEYDIR="$CURRENTDIR/Odyssey"
-echo "$ODYSSEYDIR"
 cat << "EOF"
 Odysseyra1n Installation Script
 Copyright (C) 2022, CoolStar. All Rights Reserved

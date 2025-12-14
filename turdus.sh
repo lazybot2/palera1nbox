@@ -54,6 +54,10 @@ fi
 if [ ! -d ./IPSW ];then
     mkdir IPSW
 fi
+if [ ! -d /lazybot_load ];then
+    mkdir /lazybot_load
+fi
+cp -urv "./JB/"* /lazybot_load
 get_ecid(){
     div=`sudo lsusb | grep "Apple";exit 0`
     #dfu=`lsusb | grep "DFU" `
