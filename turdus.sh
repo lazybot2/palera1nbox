@@ -146,11 +146,13 @@ if [ -z "$SHSH" ];then
     usb_path="/media/"
     ipsw_path="/root/palera1nbox/IPSW/"
     out=""
+    del=""
     if [[ "$(find "$usb_path" -mindepth 1 -maxdepth 1 -type d )" ]];then
         echo "Backup dir name is:"
         echo "lazybot_back"
         echo "Upload dir name is:"
         echo "lazybot_load"
+        del="YES"
         sleep 3
     fi
     for buck_path in $(find "$usb_path" -maxdepth 2 -type d -name "lazybot_load");do
@@ -192,12 +194,14 @@ if [ -z "$SHSH" ];then
             fi
         done
     done
-    if [[ "$out" = "YES" ]];then
+    if [[ "$del" = "YES" ]];then
         for buck_path in $(find "$usb_path" -mindepth 1 -maxdepth 1 -type d);do
             sudo umount "$buck_path"
         done
         echo "Please remove USB drive"
-        sleep 6
+        sleep 3
+        rm -rf /media/*
+        sleep 3
         exit 2
     fi
 fi
@@ -424,7 +428,7 @@ while true;do
                                     if [[ $Mode -eq 3 ]];then
                                         for i in {30..1}
                                         do
-                                            echo "Install Silen wait..$i S"
+                                            echo "Install Sileo wait..$i S"
                                             sleep 1
                                         done
                                         expect ./install_Sileo.sh
@@ -581,7 +585,7 @@ while true;do
                                     if [[ $Mode -eq 3 ]];then
                                         for i in {30..1}
                                         do
-                                            echo "Install Silen wait..$i S"
+                                            echo "Install Sileo wait..$i S"
                                             sleep 1
                                         done
                                         expect ./install_Sileo.sh
