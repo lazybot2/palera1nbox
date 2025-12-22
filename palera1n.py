@@ -1,6 +1,6 @@
 ﻿import bakebit_128_64_oled as oled
 from PIL import Image, ImageFont, ImageDraw
-import time,signal,subprocess,os
+import time,signal,subprocess,os,psutil
 
 
 background_processes = []
@@ -74,6 +74,16 @@ def get_device_state():
     else:
         return 'normal'
     
+def kill_palera1n():
+    try:
+        pids = psutil.pids()
+        for pid in pids:
+            p = psutil.Process(pid)
+            process_name=p.name()
+            if 'palera1n' == process_name:
+                os.kill(pid, signal.SIGKILL)
+    except Exception as e:
+        display_message(f"Erreur: {e}")
 
 def animation_connection(root_type, options):
     global current_menu, cursor_position
@@ -86,6 +96,7 @@ def animation_connection(root_type, options):
     x_position = (width - text_width) / 2
     y_position = (height - text_height) / 2
     draw.text((x_position, y_position), text, font=font14, fill=255)
+    kill_palera1n()
     if root_type:
         mode_txt=f'MODE: {root_type.upper()}'
         x_position = 3
@@ -136,8 +147,7 @@ def animation_connection(root_type, options):
         if get_device_state() == text:
             break
         time.sleep(1)
-    time.sleep(1)
-    execute_command(root_type, options)
+        
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
     text = "JAILBREAKING"
     text_width, text_height = draw.textsize(text, font=font14)
@@ -145,6 +155,8 @@ def animation_connection(root_type, options):
     y_position = (height - text_height) / 2
     draw.text((x_position, y_position), text, font=font14, fill=255)
     oled.drawImage(image)
+    time.sleep(3)
+    execute_command(root_type, options)
     time.sleep(15)
 
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
@@ -172,14 +184,30 @@ def animation_connection(root_type, options):
     time.sleep(3)
 
     if get_device_state() == "normal":
+        kill_palera1n()
+        print('Is normal')
         for process in background_processes:
             process.terminate()
         subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
         exit(0)
     else:
-      current_menu = 'main'
-      cursor_position = 0
-      display_menu_with_cursor(menu_options[current_menu])
+        time.sleep(3)
+        kill_palera1n()
+        if get_device_state() == "recovery":
+            print('Is recover')
+            time.sleep(1)
+            subprocess.Popen(f'sudo {bash_path}palera1n --exit-recovery', shell=True)
+            time.sleep(5)
+            kill_palera1n()
+            for process in background_processes:
+                process.terminate()
+            subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
+            exit(0)
+        else:
+            print('IS NONO')
+            current_menu = 'main'
+            cursor_position = 0
+            display_menu_with_cursor(menu_options[current_menu])
 
 def execute_command(root_type, options):
     cmd = ['sudo', f'{bash_path}palera1n']
@@ -211,6 +239,7 @@ def receive_signal(signum, stack):
                 current_menu = 'recover'
                 cursor_position = 0
             elif cursor_position == 3:
+                kill_palera1n()
                 for process in background_processes:
                     process.terminate()
                 subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
