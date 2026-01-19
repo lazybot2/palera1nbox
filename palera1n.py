@@ -188,6 +188,7 @@ def animation_connection(root_type, options):
         print('Is normal')
         for process in background_processes:
             process.terminate()
+        time.sleep(2)
         subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
         exit(0)
     else:
@@ -201,6 +202,7 @@ def animation_connection(root_type, options):
             kill_palera1n()
             for process in background_processes:
                 process.terminate()
+            time.sleep(2)
             subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
             exit(0)
         else:
@@ -217,6 +219,8 @@ def execute_command(root_type, options):
             cmd += args_map[option].strip().split()
     if root_type == 'rootfull':
         cmd.append('--fakefs')
+    elif root_type == "rootless":
+        cmd.append('--rootless')
     #print(f'{cmd}')
     process = subprocess.Popen(cmd)
     background_processes.append(process)
