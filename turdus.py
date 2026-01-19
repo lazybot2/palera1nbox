@@ -179,6 +179,7 @@ def exit_program():
     time.sleep(0.1)
     kill_checkra1n()
     subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
+    time.sleep(0.2)
     exit(0)
 
 def display_start():

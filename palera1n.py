@@ -182,14 +182,15 @@ def animation_connection(root_type, options):
     draw.text((x_position, y_position), text, font=font14, fill=255)
     oled.drawImage(image)
     time.sleep(3)
-
     if get_device_state() == "normal":
         kill_palera1n()
-        print('Is normal')
+        #print('Is normal')
+        time.sleep(2)
         for process in background_processes:
             process.terminate()
-        time.sleep(2)
+        time.sleep(1)
         subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
+        time.sleep(0.2)
         exit(0)
     else:
         time.sleep(3)
@@ -202,8 +203,9 @@ def animation_connection(root_type, options):
             kill_palera1n()
             for process in background_processes:
                 process.terminate()
-            time.sleep(2)
+            time.sleep(1)
             subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
+            time.sleep(0.2)
             exit(0)
         else:
             print('IS NONO')
@@ -247,6 +249,7 @@ def receive_signal(signum, stack):
                 for process in background_processes:
                     process.terminate()
                 subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
+                time.sleep(0.2)
                 exit(0)
         elif current_menu in ['rootless', 'rootfull','recover']:
             if cursor_position == 0:
