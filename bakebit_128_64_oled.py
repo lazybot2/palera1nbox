@@ -52,6 +52,7 @@ SeeedOLED_Max_Y                 =SeeedOLED_Height-1
 PAGE_MODE                       =0x01
 HORIZONTAL_MODE                 =0x02
 
+lightOLED                       =0x80
 SeeedOLED_Address               =0x3d
 SeeedOLED_Command_Mode          =0x00
 SeeedOLED_Data_Mode             =0x40 #####
@@ -179,7 +180,7 @@ def sendCommand(byte):
         block.append(byte)
         return bus.write_i2c_block_data(address,SeeedOLED_Command_Mode,block)
     except IOError:
-        print("IOError")
+        print("IOError0")
         return -1
 
 def sendData(byte):
@@ -188,14 +189,14 @@ def sendData(byte):
         block.append(byte)
         return bus.write_i2c_block_data(address,SeeedOLED_Data_Mode,block)
     except IOError:
-        print("IOError")
+        print("IOError1")
         return -1
 
 def sendArrayData(array):
     try:
         return bus.write_i2c_block_data(address,SeeedOLED_Data_Mode,array)
     except IOError:
-        print("IOError")
+        print("IOError2")
         return -1
 
 def multi_comm(commands):
@@ -211,7 +212,7 @@ def base_init():
         sendCommand(0xB0)    #set page address
 
         sendCommand(0x81)
-        sendCommand(0xCF)    #0~255????????????????
+        sendCommand(lightOLED)    #0~255????????????????
 
         sendCommand(0xA1)    #set segment remap
 
@@ -253,7 +254,7 @@ def init():
         sendCommand(0xB0)    #set page address
 
         sendCommand(0x81)
-        sendCommand(0xCF)    #0~255????????????????
+        sendCommand(lightOLED)    #0~255????????????????
 
         sendCommand(0xA1)    #set segment remap
 

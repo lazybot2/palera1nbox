@@ -9,6 +9,7 @@ image = Image.new('1', (width, height))
 draw = ImageDraw.Draw(image)
 font14 = ImageFont.truetype('DejaVuSansMono.ttf', 14)
 font10 = ImageFont.truetype('DejaVuSansMono.ttf', 10)
+zfont14= ImageFont.truetype('msyh.ttc', 14)
 bash_path =f'{os.getcwd()}/'
 #command chk
 if '755' != oct(os.stat(f'{bash_path}palera1n').st_mode)[-3:]:
@@ -158,6 +159,28 @@ def animation_connection(root_type, options):
     time.sleep(3)
     execute_command(root_type, options)
     time.sleep(15)
+    if get_device_state() == 'dfu':
+        draw.rectangle((0, 0, width, height), outline=0, fill=0)
+        text = "Reconnect the device"
+        text_width, text_height = draw.textsize(text, font=font10)
+        x_position = (width - text_width) / 2
+        y_position = (height - text_height) / 4
+        draw.text((x_position, y_position),text, font=font10, fill=255)
+        text = "请拔插数据线重连"
+        text_width, text_height = draw.textsize(text, font=zfont14)
+        x_position = (width - text_width) / 2
+        y_position = height - text_height-5
+        draw.text((x_position, y_position),text, font=zfont14, fill=255)
+        oled.drawImage(image)
+        startTime = time.time()
+        while (time.time() - startTime) < 30:
+            if not get_device_state():
+                time.sleep(1)
+                if not get_device_state():
+                    print('退出DFU')
+                    break
+            time.sleep(1)
+        time.sleep(2)
 
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
     text = "BOOTING"
@@ -172,8 +195,58 @@ def animation_connection(root_type, options):
     while (time.time() - startTime) < 900:
         if get_device_state():
             break
-        time.sleep(1)
-
+        time.sleep(2)
+    
+#处理卡 PongoOS    
+    if get_device_state() == 'dfu':
+        kill_palera1n()
+        draw.rectangle((0, 0, width, height), outline=0, fill=0)
+        text = "PongoOS or DFU"
+        text_width, text_height = draw.textsize(text, font=font14)
+        x_position = (width - text_width) / 2
+        y_position = (height - text_height) / 2
+        draw.text((x_position, y_position), text, font=font14, fill=255)
+        oled.drawImage(image)
+        time.sleep(0.5)
+        execute_command(root_type, options)
+        time.sleep(5)
+        if get_device_state() == 'dfu':
+            draw.rectangle((0, 0, width, height), outline=0, fill=0)
+            text = "Reconnect the device"
+            text_width, text_height = draw.textsize(text, font=font10)
+            x_position = (width - text_width) / 2
+            y_position = (height - text_height) / 4
+            draw.text((x_position, y_position),text, font=font10, fill=255)
+            text = "请拔插数据线重连"
+            text_width, text_height = draw.textsize(text, font=zfont14)
+            x_position = (width - text_width) / 2
+            y_position = height - text_height-5
+            draw.text((x_position, y_position),text, font=zfont14, fill=255)
+            oled.drawImage(image)
+            startTime = time.time()
+            while (time.time() - startTime) < 30:
+                if not get_device_state():
+                    time.sleep(1)
+                    if not get_device_state():
+                        print('退出DFU')
+                        break
+                time.sleep(1)
+            time.sleep(2)
+        draw.rectangle((0, 0, width, height), outline=0, fill=0)
+        text = "BOOTING"
+        text_width, text_height = draw.textsize(text, font=font14)
+        x_position = (width - text_width) / 2
+        y_position = (height - text_height) / 2
+        draw.text((x_position, y_position), text, font=font14, fill=255)
+        oled.drawImage(image)
+        time.sleep(10)
+        startTime = time.time()
+        while (time.time() - startTime) < 900:
+            if get_device_state():
+                break
+            time.sleep(2)
+#处理卡 PongoOS
+    time.sleep(1)
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
     text = "All Done"
     text_width, text_height = draw.textsize(text, font=font14)
@@ -184,11 +257,9 @@ def animation_connection(root_type, options):
     time.sleep(3)
     if get_device_state() == "normal":
         kill_palera1n()
-        #print('Is normal')
-        time.sleep(2)
         for process in background_processes:
             process.terminate()
-        time.sleep(1)
+        time.sleep(0.5)
         subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
         time.sleep(0.2)
         exit(0)
@@ -197,13 +268,13 @@ def animation_connection(root_type, options):
         kill_palera1n()
         if get_device_state() == "recovery":
             print('Is recover')
-            time.sleep(1)
+            time.sleep(0.5)
             subprocess.Popen(f'sudo {bash_path}palera1n --exit-recovery', shell=True)
             time.sleep(5)
             kill_palera1n()
             for process in background_processes:
                 process.terminate()
-            time.sleep(1)
+            time.sleep(0.5)
             subprocess.Popen(f'python3 {bash_path}menu.py', shell=True)
             time.sleep(0.2)
             exit(0)
