@@ -66,17 +66,10 @@ if [ ! -f /usr/local/bin/oled-start ]; then
 cat >/usr/local/bin/oled-start <<EOL
 #!/bin/sh
 EOL
-    if [ $(uname -m) = 'aarch64' ]; then
-        echo "rmdir /media/*"  >> /usr/local/bin/oled-start
-    fi
     echo "usb=\`i2cdetect -l | grep i2c | awk '{print \$1}'\`" >> /usr/local/bin/oled-start
     echo "if [ ! -z \"\$usb\" ]; then" >> /usr/local/bin/oled-start
     echo "  cd $PWD/" >> /usr/local/bin/oled-start
     echo "  ./NanoHatOLED" >> /usr/local/bin/oled-start
-    echo "  sleep 15" >> /usr/local/bin/oled-start
-    echo "  if [ -f \"$PWD/autowifi.sh\" ];then" >> /usr/local/bin/oled-start
-    echo "    /bin/bash $PWD/autowifi.sh" >> /usr/local/bin/oled-start
-    echo "  fi" >> /usr/local/bin/oled-start
     echo "else" >> /usr/local/bin/oled-start
     echo "  reboot" >> /usr/local/bin/oled-start
     echo "fi" >> /usr/local/bin/oled-start
@@ -88,28 +81,16 @@ case $nanopi in
     0)
     wget -O checkra1n https://assets.checkra.in/downloads/linux/cli/arm/ff05dfb32834c03b88346509aec5ca9916db98de3019adf4201a2a6efe31e9f5/checkra1n
     wget -O palera1n "https://github.com/palera1n/palera1n/releases/download/$palera1n_version/palera1n-linux-armel"
-    cp -f menu_neo.py menu.py
     ;;
     1)
     wget -O checkra1n https://assets.checkra.in/downloads/linux/cli/arm64/43019a573ab1c866fe88edb1f2dd5bb38b0caf135533ee0d6e3ed720256b89d0/checkra1n
     wget -O palera1n "https://github.com/palera1n/palera1n/releases/download/$palera1n_version/palera1n-linux-arm64"
-    cp -f menu_neo2.py menu.py
     ;;
 esac
 sudo chmod +x ./NanoHatOLED
 sudo chmod +x ./checkra1n
 sudo chmod +x ./palera1n
-sudo chmod +x ./turdus_merula
-sudo chmod +x ./turdusra1n
-if [ $(uname -m) = 'aarch64' ]; then
-    if [ ! -d ./IPSW ];then
-        mkdir IPSW
-    fi
-    cd udev-media-automount-master
-    sudo make install
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-fi
+sudo rm-f ./turdus*
 cd $home
 git clone https://github.com/armbian/config.git
 cd config

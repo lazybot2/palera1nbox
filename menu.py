@@ -71,7 +71,7 @@ def display_reboot_confirmation():
     if len(IP) < 2:
         IP = ' no network'
     else:
-        IP="IP:" + IP
+        IP = IP
     draw.text((0, 42), IP, font=font14, fill=255)  # Texte en blanc pour "YES"
     oled.drawImage(image)
 

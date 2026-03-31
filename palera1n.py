@@ -146,7 +146,9 @@ def animation_connection(root_type, options):
        text = 'recovery'
     while True:
         if get_device_state() == text:
-            break
+            time.sleep(0.5)
+            if get_device_state() == text:
+                break
         time.sleep(1)
         
     draw.rectangle((0, 0, width, height), outline=0, fill=0)
